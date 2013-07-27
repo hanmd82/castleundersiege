@@ -49,9 +49,16 @@ package
 				mStarling.nativeStage.frameRate = 30;
 			
 			// define which resources to load
-			var assets:AssetManager = new AssetManager();
-			assets.verbose = Capabilities.isDebugger;
-			//assets.enqueue(EmbeddedAssets);
+			GM.appInit();
+			// -> now load all the enqueued assets. When "ratio" equals "1", we are finished.
+			GM.assets.loadQueue(function(ratio:Number):void
+			{
+				trace("Loading assets, progress:", ratio);
+				
+				if (ratio == 1.0)
+					Game.startGame();
+			});
+			
 			
 			// background texture is embedded, because we need it right away!
 			//var bgTexture:Texture = Texture.fromEmbeddedAsset(Background, false);

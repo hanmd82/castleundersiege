@@ -1,8 +1,15 @@
 package
 {
-	import flash.display.DisplayObject;
-	import flash.events.Event;
+	import flash.system.Capabilities;
 	import flash.utils.getTimer;
+	
+	import starling.display.DisplayObjectContainer;
+	import starling.display.Image;
+	import starling.events.Event;
+	import starling.text.TextField;
+	import starling.textures.Texture;
+	import starling.textures.TextureAtlas;
+	import starling.utils.AssetManager;
 
 	/**
 	 * Game Master
@@ -11,12 +18,17 @@ package
 	 */
 	public class GM
 	{
-		public static var gridNumCellsX:int;
-		public static var gridNumCellsY:int;
+		public static const tileWidth:int = 32;
+		public static const tileHeight:int = 32;
+		public static const gridNumCellsX:int = 20;
+		public static const gridNumCellsY:int = 15;
 		public static var grid:Array;
-		public static var root:DisplayObject;
+		public static var root:DisplayObjectContainer;
 		public static var totalElapsedMS:Number;
 		public static var elapsedMS:Number;
+		
+		// assets manager
+		public static var assets:AssetManager;
 		
 		// towers
 		
@@ -29,18 +41,48 @@ package
 		{
 		}
 		
-		public static function gameInit(newRoot:DisplayObject):void
+		public static function appInit():void
 		{
+			assets = new AssetManager();
+			assets.verbose = Capabilities.isDebugger;
+			assets.enqueue(EmbeddedAssets);
+		}
+		
+		public static function gameInit(newRoot:DisplayObjectContainer):void
+		{
+			//assets.addTextureAtlas("spritesheet", new TextureAtlas(assets.getTexture("spritesheet"), 
+			
+			root = newRoot;
+			root.addEventListener(Event.ENTER_FRAME, gameUpdate);
+			totalElapsedMS = getTimer();
+			
+			
+			
+			// test drawing
+			
+//			var tf:TextField = new TextField(500, 300, "hello world");
+//			root.addChild(tf);
+			
+			// tile texture
+			var tileTex:Texture = assets.getTexture("tile");
+			
 			// set up grid
 			grid = new Array(gridNumCellsX);
 			for(var x:int = 0; x < gridNumCellsX; x++)
 			{
 				grid[x] = new Array(gridNumCellsY);
+				for(var y:int = 0; y < gridNumCellsY; y++)
+				{
+					//grid[x][y]
+					var tileImg:Image = new Image(tileTex);
+					tileImg.x = x*tileWidth;
+					tileImg.y = y*tileHeight;
+					root.addChild(tileImg);
+				}
 			}
+			// draw grid
 			
-			root = newRoot;
-			root.addEventListener(Event.ENTER_FRAME, gameUpdate);
-			totalElapsedMS = getTimer();
+			
 		}
 		
 		public static function gameUpdate(evt:Event):void

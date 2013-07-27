@@ -1,16 +1,19 @@
 package
 {
 	import starling.display.Sprite;
-	import starling.text.TextField;
-
+	
 	public class Game extends Sprite
 	{
+		public static var instance:Game;
+		
 		public function Game()
 		{
-			// test drawing
-			
-			var tf:TextField = new TextField(500, 300, "hello world");
-			this.addChild(tf);
+			instance = this;
+		}
+		
+		public static function startGame():void
+		{
+			GM.gameInit(Game.instance);
 		}
 	}
 }
