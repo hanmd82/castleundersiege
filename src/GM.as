@@ -1,16 +1,19 @@
 package
 {
+	import enemy.Enemy;
+	import enemy.EnemyLight;
+	
 	import flash.system.Capabilities;
 	import flash.utils.getTimer;
 	
 	import starling.display.DisplayObjectContainer;
 	import starling.display.Image;
+	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.textures.Texture;
 	import starling.utils.AssetManager;
 	
-	import towers.Tower;
-	import towers.TowerAttributeSet;
+	import towers.*;
 
 	/**
 	 * Game Master
@@ -24,7 +27,12 @@ package
 		public static const gridNumCellsX:int = 20;
 		public static const gridNumCellsY:int = 15;
 		public static var grid:Array;
+		
 		public static var root:DisplayObjectContainer;
+		public static var layerBG:Sprite;
+		public static var layerGame:Sprite;
+		public static var layerUI:Sprite;
+		
 		public static var totalElapsedMS:Number;
 		public static var elapsedMS:Number;
 		
@@ -32,10 +40,23 @@ package
 		public static var assets:AssetManager;
 		
 		// towers		
-		private static var towers:Array;
-		private static var tower_attribute_sets:Array;
+		// TOWER ATTACK DATA
+		public static const TOWER_ATTACK_DAMAGE_LIGHT:uint  = 10;
+		public static const TOWER_ATTACK_DAMAGE_MEDIUM:uint = 20;
+		public static const TOWER_ATTACK_DAMAGE_HEAVY:uint  = 30;
+
+		public static const TOWER_ATTACK_RANGE_NEAR:uint    = 5;
+		public static const TOWER_ATTACK_RANGE_MEDIUM:uint  = 10;
+		public static const TOWER_ATTACK_RANGE_FAR:uint     = 20;
+
+		public static const TOWER_ATTACK_INTERVAL_SLOW:uint   = 20;
+		public static const TOWER_ATTACK_INTERVAL_MEDIUM:uint = 10;
+		public static const TOWER_ATTACK_INTERVAL_FAST:uint   = 5;
+			
+		public static var towers:Vector.<Tower>;
 		
 		// enemies
+		public static var enemies:Vector.<Enemy>;
 		
 		// waves
 		
@@ -58,17 +79,18 @@ package
 			root.addEventListener(Event.ENTER_FRAME, gameUpdate);
 			totalElapsedMS = getTimer();
 			
-			// define tower attributes
-			towers = new Array();
-			tower_attribute_sets = new Array();
+			layerBG = new Sprite();
+			root.addChild(layerBG);
 			
-			tower_attribute_sets.add(new TowerAttributeSet(Tower.TYPE_GUARD,  Tower.ATTACK_DAMAGE_LIGHT, Tower.ATTACK_RANGE_NEAR, Tower.ATTACK_INTERVAL_MEDIUM));
-			tower_attribute_sets.add(new TowerAttributeSet(Tower.TYPE_ARCHER, Tower.ATTACK_DAMAGE_LIGHT, Tower.ATTACK_RANGE_FAR,  Tower.ATTACK_INTERVAL_MEDIUM));
-			tower_attribute_sets.add(new TowerAttributeSet(Tower.TYPE_CANNON, Tower.ATTACK_DAMAGE_HEAVY, Tower.ATTACK_RANGE_NEAR, Tower.ATTACK_INTERVAL_SLOW));
-			tower_attribute_sets.add(new TowerAttributeSet(Tower.TYPE_FROST,  Tower.ATTACK_DAMAGE_LIGHT, Tower.ATTACK_RANGE_NEAR, Tower.ATTACK_INTERVAL_SLOW));
+			layerGame = new Sprite();
+			root.addChild(layerGame);
 			
-			
-			// test drawing
+			layerUI = new Sprite();
+			root.addChild(layerUI);
+
+			// set up arrays
+			enemies = new Vector.<Enemy>();
+			towers  = new Vector.<Tower>();
 			
 //			var tf:TextField = new TextField(500, 300, "hello world");
 //			root.addChild(tf);
@@ -87,11 +109,14 @@ package
 					var tileImg:Image = new Image(tileTex);
 					tileImg.x = x*tileWidth;
 					tileImg.y = y*tileHeight;
-					root.addChild(tileImg);
+					layerBG.addChild(tileImg);
 				}
 			}
 			// draw grid
 			
+			
+			// test enemy
+			new EnemyLight(100,100);
 			
 		}
 		
@@ -104,6 +129,26 @@ package
 			
 			// game logic
 			
+			var i:int;
+			
+			// update enemies
+			for(i = 0; i < enemies.length; i++)
+			{
+				enemies[i].update();
+			}
+			
+			// clean up
+			var c:int;
+			for(c = 0; c < enemies.length; )
+			{
+				if(enemies[c].bMarkedForDestroy)
+				{
+					enemies[c].destroy();
+					enemies.splice(c,1);
+				}
+				else
+					c++;
+			}
 		}
 		
 		public static function gameEnd():void
