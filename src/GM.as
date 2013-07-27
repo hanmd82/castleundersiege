@@ -3,8 +3,12 @@ package
 	import flash.system.Capabilities;
 	import flash.utils.getTimer;
 	
+	import enemy.Enemy;
+	import enemy.EnemyLight;
+	
 	import starling.display.DisplayObjectContainer;
 	import starling.display.Image;
+	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.text.TextField;
 	import starling.textures.Texture;
@@ -23,7 +27,12 @@ package
 		public static const gridNumCellsX:int = 20;
 		public static const gridNumCellsY:int = 15;
 		public static var grid:Array;
+		
 		public static var root:DisplayObjectContainer;
+		public static var layerBG:Sprite;
+		public static var layerGame:Sprite;
+		public static var layerUI:Sprite;
+		
 		public static var totalElapsedMS:Number;
 		public static var elapsedMS:Number;
 		
@@ -34,6 +43,7 @@ package
 		
 		
 		// enemies
+		public static var enemies:Vector.<Enemy>;
 		
 		// waves
 		
@@ -56,9 +66,17 @@ package
 			root.addEventListener(Event.ENTER_FRAME, gameUpdate);
 			totalElapsedMS = getTimer();
 			
+			layerBG = new Sprite();
+			root.addChild(layerBG);
 			
+			layerGame = new Sprite();
+			root.addChild(layerGame);
 			
-			// test drawing
+			layerUI = new Sprite();
+			root.addChild(layerUI);
+			
+			// set up arrays
+			enemies = new Vector.<Enemy>();
 			
 //			var tf:TextField = new TextField(500, 300, "hello world");
 //			root.addChild(tf);
@@ -77,11 +95,14 @@ package
 					var tileImg:Image = new Image(tileTex);
 					tileImg.x = x*tileWidth;
 					tileImg.y = y*tileHeight;
-					root.addChild(tileImg);
+					layerBG.addChild(tileImg);
 				}
 			}
 			// draw grid
 			
+			
+			// test enemy
+			new EnemyLight(100,100);
 			
 		}
 		
@@ -94,6 +115,26 @@ package
 			
 			// game logic
 			
+			var i:int;
+			
+			// update enemies
+			for(i = 0; i < enemies.length; i++)
+			{
+				enemies[i].update();
+			}
+			
+			// clean up
+			var c:int;
+			for(c = 0; c < enemies.length; )
+			{
+				if(enemies[c].bMarkedForDestroy)
+				{
+					enemies[c].destroy();
+					enemies.splice(c,1);
+				}
+				else
+					c++;
+			}
 		}
 		
 		public static function gameEnd():void
