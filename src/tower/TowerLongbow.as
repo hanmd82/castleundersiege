@@ -13,10 +13,9 @@ package tower
 			sprite.x = posX;
 			sprite.y = posY;
 			
-			damage         = GM.TOWER_ATTACK_DAMAGE_LIGHT;
-			range          = GM.TOWER_ATTACK_RANGE_FAR;
+			attackRadius   = GM.TOWER_ATTACK_RADIUS_LARGE;
 			attackInterval = GM.TOWER_ATTACK_INTERVAL_MEDIUM;
-			numBarrels     = 1;
+			numProjectiles = 1;
 		}
 	}
 }

@@ -11,6 +11,7 @@ package
 	import starling.utils.AssetManager;
 	
 	import tower.*;
+	import projectile.*;
 	import enemy.*;
 
 	/**
@@ -25,37 +26,44 @@ package
 		public static const gridNumCellsX:int = 20;
 		public static const gridNumCellsY:int = 15;
 		public static var grid:Array;
-		
+
 		public static var root:DisplayObjectContainer;
 		public static var layerBG:Sprite;
 		public static var layerGame:Sprite;
 		public static var layerUI:Sprite;
-		
+
 		public static var totalElapsedMS:Number;
 		public static var elapsedMS:Number;
-		
+
 		// assets manager
 		public static var assets:AssetManager;
-		
+
 		// towers		
 		// TOWER ATTACK DATA
-		public static const TOWER_ATTACK_DAMAGE_LIGHT:uint  = 10;
-		public static const TOWER_ATTACK_DAMAGE_MEDIUM:uint = 20;
-		public static const TOWER_ATTACK_DAMAGE_HEAVY:uint  = 30;
-
-		public static const TOWER_ATTACK_RANGE_NEAR:uint    = 5;
-		public static const TOWER_ATTACK_RANGE_MEDIUM:uint  = 10;
-		public static const TOWER_ATTACK_RANGE_FAR:uint     = 20;
+		public static const TOWER_ATTACK_RADIUS_SMALL:uint  = 5;
+		public static const TOWER_ATTACK_RADIUS_MEDIUM:uint = 10;
+		public static const TOWER_ATTACK_RADIUS_LARGE:uint  = 20;
 
 		public static const TOWER_ATTACK_INTERVAL_SLOW:uint   = 20;
 		public static const TOWER_ATTACK_INTERVAL_MEDIUM:uint = 10;
 		public static const TOWER_ATTACK_INTERVAL_FAST:uint   = 5;
-			
+
 		public static var towers:Vector.<Tower>;
-		
+
+		// projectiles
+		public static const PROJECTILE_DAMAGE_LIGHT:uint  = 10;
+		public static const PROJECTILE_DAMAGE_MEDIUM:uint = 20;
+		public static const PROJECTILE_DAMAGE_HEAVY:uint  = 30;
+
+		public static const PROJECTILE_HIT_RADIUS_SMALL:uint  = 1;
+		public static const PROJECTILE_HIT_RADIUS_MEDIUM:uint = 3;
+		public static const PROJECTILE_HIT_RADIUS_LARGE:uint  = 5;
+
+		public static var projectiles:Vector.<Projectile>;
+
 		// enemies
 		public static var enemies:Vector.<Enemy>;
-		
+
 		// waves
 		
 		public function GM()
@@ -87,8 +95,9 @@ package
 			root.addChild(layerUI);
 
 			// set up arrays
-			enemies = new Vector.<Enemy>();
-			towers  = new Vector.<Tower>();
+			towers      = new Vector.<Tower>();
+			projectiles = new Vector.<Projectile>();
+			enemies     = new Vector.<Enemy>();
 			
 //			var tf:TextField = new TextField(500, 300, "hello world");
 //			root.addChild(tf);

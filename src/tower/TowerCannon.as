@@ -4,7 +4,7 @@ package tower
 
 	public class TowerCannon extends Tower
 	{
-		public function TowerLongbow(posX:Number, posY:Number)
+		public function TowerCannon(posX:Number, posY:Number)
 		{
 			super();
 			
@@ -13,10 +13,9 @@ package tower
 			sprite.x = posX;
 			sprite.y = posY;
 			
-			damage         = GM.TOWER_ATTACK_DAMAGE_HEAVY;
-			range          = GM.TOWER_ATTACK_RANGE_NEAR;
+			attackRadius   = GM.TOWER_ATTACK_RADIUS_SMALL;
 			attackInterval = GM.TOWER_ATTACK_INTERVAL_SLOW;
-			numBarrels     = 1;
+			numProjectiles = 1;
 		}
 	}
 }

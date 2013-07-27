@@ -5,10 +5,9 @@ package tower
 
 	public class Tower
 	{
-		public var damage:Number;
-		public var range:Number;
-		public var attackInterval:Number;
-		public var numBarrels:Number;
+		public var attackRadius:Number;
+		public var attackInterval:Number;	// ammo reload interval
+		public var numProjectiles:Number;	// that can be fired in parallel
 		
 		public var towerPos:Point;
 		public var sprite:Sprite;
