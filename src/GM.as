@@ -1,12 +1,19 @@
 package
 {
+	import flash.geom.Point;
 	import flash.system.Capabilities;
 	import flash.utils.getTimer;
+	
+	import enemy.Enemy;
+	import enemy.EnemyLight;
 	
 	import starling.display.DisplayObjectContainer;
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
+	import starling.events.Touch;
+	import starling.events.TouchEvent;
+	import starling.events.TouchPhase;
 	import starling.textures.Texture;
 	import starling.utils.AssetManager;
 	
@@ -37,7 +44,17 @@ package
 
 		// assets manager
 		public static var assets:AssetManager;
-
+		
+		// touch input (only one button for now)
+		public static var touchPos:Point = new Point();
+		public static var isTouching:Boolean = false;
+		
+		// TILE
+		public static var prevTouchedTile:Image;
+		public static var prevTouchedGX:int;
+		public static var prevTouchedGY:int;
+		public static const TILE_TINT_COLOR:uint = 0x993300;
+		
 		// towers		
 		// TOWER ATTACK DATA
 		public static const TOWER_ATTACK_RADIUS_SMALL:uint  = 5;
@@ -85,6 +102,8 @@ package
 			root.addEventListener(Event.ENTER_FRAME, gameUpdate);
 			totalElapsedMS = getTimer();
 			
+			root.addEventListener(TouchEvent.TOUCH, gameInput);
+			
 			layerBG = new Sprite();
 			root.addChild(layerBG);
 			
@@ -114,6 +133,7 @@ package
 				{
 					//grid[x][y]
 					var tileImg:Image = new Image(tileTex);
+					tileImg.name = "tile_"+x+"_"+y;
 					tileImg.x = x*tileWidth;
 					tileImg.y = y*tileHeight;
 					layerBG.addChild(tileImg);
@@ -121,10 +141,41 @@ package
 			}
 			// draw grid
 			
+			prevTouchedTile = null;
 			
 			// test enemy
 			new EnemyLight(100,100);
 			
+			
+			
+		}
+		
+		public static function gameInput(evt:TouchEvent):void
+		{
+			var touch:Touch;
+			touch = evt.getTouch(root, TouchPhase.BEGAN);
+			if (touch)
+			{
+				touchPos = touch.getLocation(root);
+				isTouching = true;
+				//trace("Touched object began at position: " + touchPos);
+			}
+			
+			touch = evt.getTouch(root, TouchPhase.MOVED);
+			if(touch)
+			{
+				touchPos = touch.getLocation(root);
+				isTouching = true;
+				//trace("Touched object move at position: " + touchPos);
+			}
+			
+			touch = evt.getTouch(root, TouchPhase.ENDED);
+			if(touch)
+			{
+				touchPos = touch.getLocation(root);
+				isTouching = false;
+				//trace("Touched object ended at position: " + touchPos);
+			}
 		}
 		
 		public static function gameUpdate(evt:Event):void
@@ -134,7 +185,42 @@ package
 			elapsedMS = currMS - totalElapsedMS;
 			totalElapsedMS = currMS;
 			
+			//////////////////
 			// game logic
+			//////////////////
+			
+			
+			// handle input
+			// convert touchPos to grid cell index
+			var gx:int = Math.floor(touchPos.x / 32);
+			var gy:int = Math.floor(touchPos.y / 32);
+			if(isTouching)
+			{
+				if(gx != prevTouchedGX || gy != prevTouchedGY)
+				{
+					// default color tint is white
+					if(prevTouchedTile)
+						prevTouchedTile.color = 0xFFFFFF;
+					
+					var tileImg:Image = layerBG.getChildByName("tile_"+gx+"_"+gy) as Image;
+					tileImg.color = TILE_TINT_COLOR;
+					prevTouchedTile = tileImg;
+					prevTouchedGX = gx;
+					prevTouchedGY = gy;
+					//tileImg.visible = true;
+				}
+			}
+			else if(prevTouchedTile)
+			{
+				prevTouchedTile.color = 0xFFFFFF;
+				prevTouchedTile = null;
+				
+				if(grid[gx][gy] == null)
+				{
+					grid[gx][gy] = new TowerLongbow(gx*tileWidth, gy*tileHeight);
+				}
+			}
+			
 			
 			var i:int;
 			
