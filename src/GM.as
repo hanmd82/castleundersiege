@@ -6,10 +6,11 @@ package
 	import starling.display.DisplayObjectContainer;
 	import starling.display.Image;
 	import starling.events.Event;
-	import starling.text.TextField;
 	import starling.textures.Texture;
-	import starling.textures.TextureAtlas;
 	import starling.utils.AssetManager;
+	
+	import towers.Tower;
+	import towers.TowerAttributeSet;
 
 	/**
 	 * Game Master
@@ -30,8 +31,9 @@ package
 		// assets manager
 		public static var assets:AssetManager;
 		
-		// towers
-		
+		// towers		
+		private static var towers:Array;
+		private static var tower_attribute_sets:Array;
 		
 		// enemies
 		
@@ -56,6 +58,14 @@ package
 			root.addEventListener(Event.ENTER_FRAME, gameUpdate);
 			totalElapsedMS = getTimer();
 			
+			// define tower attributes
+			towers = new Array();
+			tower_attribute_sets = new Array();
+			
+			tower_attribute_sets.add(new TowerAttributeSet(Tower.TYPE_GUARD,  Tower.ATTACK_DAMAGE_LIGHT, Tower.ATTACK_RANGE_NEAR, Tower.ATTACK_INTERVAL_MEDIUM));
+			tower_attribute_sets.add(new TowerAttributeSet(Tower.TYPE_ARCHER, Tower.ATTACK_DAMAGE_LIGHT, Tower.ATTACK_RANGE_FAR,  Tower.ATTACK_INTERVAL_MEDIUM));
+			tower_attribute_sets.add(new TowerAttributeSet(Tower.TYPE_CANNON, Tower.ATTACK_DAMAGE_HEAVY, Tower.ATTACK_RANGE_NEAR, Tower.ATTACK_INTERVAL_SLOW));
+			tower_attribute_sets.add(new TowerAttributeSet(Tower.TYPE_FROST,  Tower.ATTACK_DAMAGE_LIGHT, Tower.ATTACK_RANGE_NEAR, Tower.ATTACK_INTERVAL_SLOW));
 			
 			
 			// test drawing
