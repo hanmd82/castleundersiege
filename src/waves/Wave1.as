@@ -5,6 +5,14 @@ package waves
 		public function Wave1()
 		{
 			super();
+			
+			// schedule something
+			const numSchedule:int = 50;
+			for(var i:int; i < numSchedule; i++)
+			{
+				
+			}
 		}
+		
 	}
 }
