@@ -1,8 +1,5 @@
 package
 {
-	import enemy.Enemy;
-	import enemy.EnemyLight;
-	
 	import flash.system.Capabilities;
 	import flash.utils.getTimer;
 	
@@ -13,7 +10,8 @@ package
 	import starling.textures.Texture;
 	import starling.utils.AssetManager;
 	
-	import towers.*;
+	import tower.*;
+	import enemy.*;
 
 	/**
 	 * Game Master

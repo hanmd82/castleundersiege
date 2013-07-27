@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
-<!-- $TexturePacker:SmartUpdate:a5fe4b9378202f78f1d57ac4aec75ee2:1/1$ -->
+<!-- $TexturePacker:SmartUpdate:bafb1df6eb1dd95066ad2b3582d20883$ -->
 <TextureAtlas imagePath="spritesheet.png">
     <SubTexture name="enemy_heavy" x="2" y="2" width="16" height="16"/>
     <SubTexture name="enemy_light" x="20" y="2" width="16" height="16"/>
-    <SubTexture name="tile" x="2" y="20" width="32" height="32"/>
-    <SubTexture name="tower" x="2" y="54" width="32" height="32"/>
+    <SubTexture name="tile" x="38" y="2" width="32" height="32"/>
+    <SubTexture name="tower_basic" x="72" y="2" width="32" height="32"/>
+    <SubTexture name="tower_cannon" x="2" y="36" width="32" height="32"/>
+    <SubTexture name="tower_longbow" x="36" y="36" width="32" height="32"/>
 </TextureAtlas>

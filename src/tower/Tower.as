@@ -1,4 +1,4 @@
-package towers
+package tower
 {
 	import flash.geom.Point;
 	import starling.display.Sprite;

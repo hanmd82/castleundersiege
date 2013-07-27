@@ -1,4 +1,4 @@
-package towers
+package tower
 {
 	import starling.display.Image;
 
