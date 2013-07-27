@@ -5,8 +5,6 @@ package
 	
 	import starling.core.Starling;
 	import starling.events.Event;
-	import starling.textures.Texture;
-	import starling.utils.AssetManager;
 	
 	[SWF(width="640", height="480", frameRate="60", backgroundColor="#222222")]
 	public class CastleUnderSiege extends Sprite
