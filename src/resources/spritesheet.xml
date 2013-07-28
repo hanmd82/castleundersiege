@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
-<!-- $TexturePacker:SmartUpdate:939545fee92e570e65ca9b31725ef341$ -->
+<!-- Created with TexturePacker http://texturepacker.com-->
+<!-- $TexturePacker:SmartUpdate:743bb7c6e0d588e93399d8e7a545561f$ -->
 <TextureAtlas imagePath="spritesheet.png">
     <SubTexture name="enemy_heavy" x="2" y="2" width="16" height="16"/>
     <SubTexture name="enemy_light" x="20" y="2" width="16" height="16"/>

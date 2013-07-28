@@ -61,7 +61,7 @@ package behaviours
 			// so have to do manually
 			for(var i:int = m_array.length-1; i >= 0; i--)
 			{
-				if(m_array[i].getID() == value.getID())
+				if(m_array[i].id == value.id)
 				{
 					return true;
 				}

@@ -6,7 +6,7 @@ package
 	import starling.core.Starling;
 	import starling.events.Event;
 	
-	[SWF(width="640", height="480", frameRate="60", backgroundColor="#222222")]
+	[SWF(width="640", height="480", frameRate="60", backgroundColor="#eef1f9")]
 	public class CastleUnderSiege extends Sprite
 	{
 //		[Embed(source = "/startup.jpg")]

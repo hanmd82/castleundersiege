@@ -1,11 +1,15 @@
 package
 {
 	import flash.geom.Point;
+	import flash.media.Sound;
+	import flash.media.SoundTransform;
 	import flash.system.Capabilities;
 	import flash.utils.getTimer;
 	
 	import enemy.Enemy;
 	import enemy.EnemyLight;
+	
+	import projectile.Projectile;
 	
 	import starling.display.DisplayObjectContainer;
 	import starling.display.Image;
@@ -20,6 +24,7 @@ package
 	import tower.*;
 	import projectile.*;
 	import enemy.*;
+
 
 	/**
 	 * Game Master
@@ -48,6 +53,8 @@ package
 		// touch input (only one button for now)
 		public static var touchPos:Point = new Point();
 		public static var isTouching:Boolean = false;
+		public static var isPress:Boolean = false;
+		public static var isRelease:Boolean = false;
 		
 		// TILE
 		public static var prevTouchedTile:Image;
@@ -82,6 +89,10 @@ package
 		public static var enemies:Vector.<Enemy>;
 
 		// waves
+		
+		// player
+		public static const PLAYER_HP_MAX:int = 120;
+		public static var playerHP:int;
 		
 		public function GM()
 		{
@@ -121,6 +132,8 @@ package
 //			var tf:TextField = new TextField(500, 300, "hello world");
 //			root.addChild(tf);
 			
+			prevTouchedTile = null;
+			
 			// tile texture
 			var tileTex:Texture = assets.getTexture("tile");
 			
@@ -141,23 +154,29 @@ package
 			}
 			// draw grid
 			
-			prevTouchedTile = null;
+			
 			
 			// test enemy
 			new EnemyLight(100,100);
 			
-			
+			// play music
+			var bgm:Sound = new CastleUnderSiegeBGM();
+			bgm.play(0,int.MAX_VALUE, new SoundTransform(0.7));
 			
 		}
 		
 		public static function gameInput(evt:TouchEvent):void
 		{
+			isPress = false;
+			isRelease = false;
+			
 			var touch:Touch;
 			touch = evt.getTouch(root, TouchPhase.BEGAN);
 			if (touch)
 			{
 				touchPos = touch.getLocation(root);
 				isTouching = true;
+				isPress = true;
 				//trace("Touched object began at position: " + touchPos);
 			}
 			
@@ -174,6 +193,7 @@ package
 			{
 				touchPos = touch.getLocation(root);
 				isTouching = false;
+				isRelease = true;
 				//trace("Touched object ended at position: " + touchPos);
 			}
 		}
