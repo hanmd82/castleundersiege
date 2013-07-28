@@ -1,5 +1,7 @@
 package tower
 {
+	import flash.geom.Point;
+
 	import starling.display.Image;
 
 	public class TowerBasic extends Tower
@@ -14,8 +16,7 @@ package tower
 			projectileType    = "projectile_basic";
 
 			img = new Image(GM.assets.getTexture("tower_basic"));
-			towerPos.x = posX;
-			towerPos.y = posY;
+			towerPos = new Point(posX, posY);
 
 			sprite.addChild(img);
 			sprite.x = posX;
