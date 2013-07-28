@@ -12,8 +12,8 @@ package projectile
 
 			var img:Image = new Image(GM.assets.getTexture("projectile_basic"));
 			sprite.addChild(img);
-			sprite.x = posX - img.width * 0.5;
-			sprite.y = posY - img.height * 0.5;
+			sprite.x = posX;
+			sprite.y = posY;
 			speed = initialSpeed;
 			angle = initialAngle;
 

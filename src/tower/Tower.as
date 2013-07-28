@@ -39,12 +39,11 @@ package tower
 			{
 				for each (var e:Enemy in GM.enemies)
 				{
-					var enemyPos:Point = new Point(e.sprite.x, e.sprite.y);
+					var enemyPos:Point = new Point(e.sprite.x + e.sprite.width/2, e.sprite.y + e.sprite.height/2);
 					var distance:Number = Point.distance(towerPos, enemyPos);
 					if (distance < attackRadius)
 					{
 						enemiesInRange.push(e);
-						trace("detecting");
 					}
 				}
 			}
@@ -58,11 +57,28 @@ package tower
 				if (enemies.length != 0)
 				{
 					var current_projectile:Projectile;
+					var towerCenterPos:Point = new Point(sprite.x + sprite.width/2, sprite.y + sprite.y/2);
+
+					// aim for the nearest target
 					var target:Enemy = enemies[0];
 					var targetCenterPos:Point = new Point(target.sprite.x + target.sprite.width/2, target.sprite.y + target.sprite.height/2);
+					var currentTargetDistance:int = Point.distance(towerCenterPos, targetCenterPos);
 
-					var towerCenterPos:Point = new Point(sprite.x + sprite.width/2, sprite.y + sprite.y/2);
-					var attackAngle:Number = Math.atan2(targetCenterPos.y - towerCenterPos.y, targetCenterPos.x - towerCenterPos.x);
+					for each (var e:Enemy in enemies)
+					{
+						var enemyPos:Point = new Point(e.sprite.x + e.sprite.width/2, e.sprite.y + e.sprite.height/2);
+						var currentEnemyDistance:int = Point.distance(towerCenterPos, enemyPos);
+						if (currentEnemyDistance < currentTargetDistance)
+						{
+							target = e;
+							targetCenterPos = enemyPos;
+							currentTargetDistance = currentEnemyDistance;
+						}
+					}
+					var y_coordinateDifference:int = (targetCenterPos.y + target.sprite.height*0.5) - (towerCenterPos.y + sprite.height*0.5);
+					var x_coordinateDifference:int = (targetCenterPos.x + target.sprite.width*0.5) - (towerCenterPos.x + sprite.width*0.5);
+					var attackAngle:Number = Math.atan2(y_coordinateDifference, x_coordinateDifference) * 180/Math.PI;
+					trace("%d", attackAngle);
 
 					switch(projectileType)
 					{

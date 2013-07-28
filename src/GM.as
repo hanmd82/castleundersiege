@@ -74,8 +74,8 @@ package
 		// towers		
 		// TOWER ATTACK DATA
 		public static const TOWER_DETECTION_RADIUS_SMALL:uint  = 100;
-		public static const TOWER_DETECTION_RADIUS_MEDIUM:uint = 250;
-		public static const TOWER_DETECTION_RADIUS_LARGE:uint  = 500;
+		public static const TOWER_DETECTION_RADIUS_MEDIUM:uint = 200;
+		public static const TOWER_DETECTION_RADIUS_LARGE:uint  = 300;
 
 		public static const TOWER_RELOAD_INTERVAL_MS_SLOW:uint   = 2000;
 		public static const TOWER_RELOAD_INTERVAL_MS_MEDIUM:uint = 1000;
@@ -88,9 +88,9 @@ package
 		public static const PROJECTILE_SPEED_MEDIUM:uint  = 10;
 		public static const PROJECTILE_SPEED_FAST:uint    = 15;
 
-		public static const PROJECTILE_DAMAGE_LIGHT:uint  = 10;
-		public static const PROJECTILE_DAMAGE_MEDIUM:uint = 20;
-		public static const PROJECTILE_DAMAGE_HEAVY:uint  = 30;
+		public static const PROJECTILE_DAMAGE_LIGHT:uint  = 20;
+		public static const PROJECTILE_DAMAGE_MEDIUM:uint = 30;
+		public static const PROJECTILE_DAMAGE_HEAVY:uint  = 50;
 
 		public static const PROJECTILE_DAMAGE_RADIUS_SMALL:uint  = 10;
 		public static const PROJECTILE_DAMAGE_RADIUS_MEDIUM:uint = 30;

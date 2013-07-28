@@ -17,11 +17,11 @@ package tower
 			projectileType    = "projectile_basic";
 
 			img = new Image(GM.assets.getTexture("tower_basic"));
-			towerPos = new Point(posX + img.width*0.5, posY + img.height*0.5);
-
 			sprite.addChild(img);
 			sprite.x = posX + img.width*0.5;
 			sprite.y = posY + img.height*0.5;
+			
+			towerPos = new Point(sprite.x, sprite.y);
 
 			attackRadius   = GM.TOWER_DETECTION_RADIUS_SMALL;
 			attackInterval = GM.TOWER_RELOAD_INTERVAL_MS_MEDIUM;
