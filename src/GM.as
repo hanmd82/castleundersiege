@@ -1,23 +1,25 @@
 package
 {
+	import flash.geom.Point;
+	import flash.media.Sound;
+	import flash.media.SoundTransform;
+	import flash.system.Capabilities;
+	import flash.utils.getTimer;
+	
 	import behaviours.AStar;
 	import behaviours.AStarNode;
-
+	
 	import enemy.Enemy;
 	import enemy.EnemyHeavy;
 	import enemy.EnemyLight;
 	import enemy.Route;
 	import enemy.SpawnParams;
 	import enemy.Wave;
-
-	import flash.geom.Point;
-	import flash.media.Sound;
-	import flash.media.SoundTransform;
-	import flash.system.Capabilities;
-	import flash.utils.getTimer;
-
+	
 	import projectile.Projectile;
-
+	
+	import screens.InstructionsScreen;
+	
 	import starling.display.DisplayObjectContainer;
 	import starling.display.Image;
 	import starling.display.Sprite;
@@ -57,6 +59,8 @@ package
 
 		public static var totalElapsedMS:Number;
 		public static var elapsedMS:Number;
+		
+		public static var blockInput:Boolean;
 
 		// assets manager
 		public static var assets:AssetManager;
@@ -87,9 +91,9 @@ package
 		public static var towers:Vector.<Tower>;
 
 		// projectiles
-		public static const PROJECTILE_SPEED_SLOW:uint    = 5;
-		public static const PROJECTILE_SPEED_MEDIUM:uint  = 10;
-		public static const PROJECTILE_SPEED_FAST:uint    = 15;
+		public static const PROJECTILE_SPEED_SLOW:uint    = 1;
+		public static const PROJECTILE_SPEED_MEDIUM:uint  = 3;
+		public static const PROJECTILE_SPEED_FAST:uint    = 5;
 
 		public static const PROJECTILE_DAMAGE_LIGHT:uint  = 20;
 		public static const PROJECTILE_DAMAGE_MEDIUM:uint = 30;
@@ -115,10 +119,13 @@ package
 		// castle home
 		public static const CASTLE_HP_MAX:int = 125;
 		public static var castle:Castle;
-		public static var castleHPText:TextField;
-
+		
 		// waves
 		public static var wavesQueue:Vector.<Wave>;
+		
+		// ui
+		public static var instructions:InstructionsScreen;
+		public static var castleHPText:TextField;
 		
 		public function GM()
 		{
@@ -136,10 +143,6 @@ package
 			//assets.addTextureAtlas("spritesheet", new TextureAtlas(assets.getTexture("spritesheet"), 
 			
 			root = newRoot;
-			root.addEventListener(Event.ENTER_FRAME, gameUpdate);
-			totalElapsedMS = getTimer();
-			
-			root.addEventListener(TouchEvent.TOUCH, gameInput);
 			
 			layerBG = new Sprite();
 			root.addChild(layerBG);
@@ -228,6 +231,9 @@ package
 			castleHPText.vAlign = VAlign.TOP;
 			layerUI.addChild(castleHPText);
 			
+			instructions = new InstructionsScreen();
+			instructions.show();
+			
 			
 			// play music
 			var bgm:Sound = new CastleUnderSiegeBGM();
@@ -235,8 +241,22 @@ package
 			
 		}
 		
+		public static function gameStart():void
+		{
+			root.addEventListener(Event.ENTER_FRAME, gameUpdate);
+			totalElapsedMS = getTimer();
+			root.addEventListener(TouchEvent.TOUCH, gameInput);
+			
+			isTouching = false;
+			isPress = false;
+			isRelease = false;
+		}
+		
 		public static function gameInput(evt:TouchEvent):void
 		{
+			if(blockInput)
+				return;
+			
 			isPress = false;
 			isRelease = false;
 			
@@ -262,8 +282,11 @@ package
 			if(touch)
 			{
 				touchPos = touch.getLocation(root);
-				isTouching = false;
-				isRelease = true;
+				if(isTouching)
+				{
+					isTouching = false;
+					isRelease = true;
+				}
 				//trace("Touched object ended at position: " + touchPos);
 			}
 		}
@@ -314,7 +337,7 @@ package
 				
 				if(checkTowerCellValid(gx, gy))
 				{
-					grid[gx][gy] = new TowerBasic(gx*tileWidth, gy*tileHeight);
+					grid[gx][gy] = new TowerBasic(gx, gy);
 					// whenever tower is placed, we have to re-route
 					for(var r:int = routes.length-1; r >= 0; r--)
 					{
@@ -427,6 +450,7 @@ package
 		{
 			// stop update
 			root.removeEventListener(Event.ENTER_FRAME, gameUpdate);
+			root.removeEventListener(TouchEvent.TOUCH, gameInput);
 			
 			// clear off all entities
 			var i:int;
@@ -450,6 +474,9 @@ package
 			{
 				wavesQueue.pop().destroy();
 			}
+			
+			// show the instructions again
+			instructions.show();
 		}
 		
 		

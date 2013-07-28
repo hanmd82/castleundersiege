@@ -9,7 +9,7 @@ package tower
 	{
 		public var img:Image;
 
-		public function TowerBasic(posX:Number, posY:Number)
+		public function TowerBasic(gx:int, gy:int)
 		{
 			super();
 
@@ -17,9 +17,13 @@ package tower
 			projectileType    = "projectile_basic";
 
 			img = new Image(GM.assets.getTexture("tower_basic"));
+			img.x = -(img.width>>1);
+			img.y = -(img.height>>1);
+			towerPos = new Point((gx+0.5)*GM.tileWidth, (gy+0.5)*GM.tileHeight);
+
 			sprite.addChild(img);
-			sprite.x = posX + img.width*0.5;
-			sprite.y = posY + img.height*0.5;
+			sprite.x = Math.floor(towerPos.x);
+			sprite.y = Math.floor(towerPos.y);
 			
 			towerPos = new Point(sprite.x, sprite.y);
 
@@ -39,24 +43,33 @@ package tower
 				switch (newTowerAttributeSet){
 
 					case "tower_longbow":
+					{
 						trace("upgraded to long-range longbow tower");
 						towerAttributeSet = "tower_longbow";
 						projectileType    = "projectile_basic";
 						img.texture       = GM.assets.getTexture("tower_longbow");
+						img.readjustSize();
+						img.x			  = -(img.width>>1);
+						img.y			  = -(img.height>>1);
 						attackRadius      = GM.TOWER_DETECTION_RADIUS_LARGE;
 						attackInterval    = GM.TOWER_RELOAD_INTERVAL_MS_MEDIUM;
 						break;
-
+					}
 					case "tower_cannon":
+					{
 						trace("upgraded to high-damage cannon tower");
 						towerAttributeSet = "tower_cannon";
 						projectileType    = "projectile_bomb";
 						img.texture       = GM.assets.getTexture("tower_cannon");
+						img.readjustSize();
+						img.x			  = -(img.width>>1);
+						img.y			  = -(img.height>>1);
 						attackRadius      = GM.TOWER_DETECTION_RADIUS_SMALL;
 						attackInterval    = GM.TOWER_RELOAD_INTERVAL_MS_SLOW;
 						break;
 				}
 			}
 		}
+	}
 	}
 }

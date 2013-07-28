@@ -43,9 +43,12 @@ package tower
 
 			if (isReloaded)
 			{
+				// reuse point
+				var enemyPos:Point = new Point();
 				for each (var e:Enemy in GM.enemies)
 				{
-					var enemyPos:Point = new Point(e.sprite.x + e.sprite.width/2, e.sprite.y + e.sprite.height/2);
+					enemyPos.x = e.sprite.x;
+					enemyPos.y = e.sprite.y;
 					var distance:Number = Point.distance(towerPos, enemyPos);
 					if (distance < attackRadius)
 					{
@@ -63,16 +66,19 @@ package tower
 				if (enemies.length != 0)
 				{
 					var current_projectile:Projectile;
-					var towerCenterPos:Point = new Point(sprite.x + sprite.width/2, sprite.y + sprite.y/2);
+					var towerCenterPos:Point = new Point(sprite.x, sprite.y);
 
 					// aim for the nearest target
 					var target:Enemy = enemies[0];
-					var targetCenterPos:Point = new Point(target.sprite.x + target.sprite.width/2, target.sprite.y + target.sprite.height/2);
+					var targetCenterPos:Point = new Point(target.sprite.x, target.sprite.y);
 					var currentTargetDistance:int = Point.distance(towerCenterPos, targetCenterPos);
 
+					// reuse point;
+					var enemyPos:Point = new Point();
 					for each (var e:Enemy in enemies)
 					{
-						var enemyPos:Point = new Point(e.sprite.x + e.sprite.width/2, e.sprite.y + e.sprite.height/2);
+						enemyPos.x = e.sprite.x;
+						enemyPos.y = e.sprite.y;
 						var currentEnemyDistance:int = Point.distance(towerCenterPos, enemyPos);
 						if (currentEnemyDistance < currentTargetDistance)
 						{
@@ -81,19 +87,19 @@ package tower
 							currentTargetDistance = currentEnemyDistance;
 						}
 					}
-					var y_coordinateDifference:int = (targetCenterPos.y + target.sprite.height*0.5) - (towerCenterPos.y + sprite.height*0.5);
-					var x_coordinateDifference:int = (targetCenterPos.x + target.sprite.width*0.5) - (towerCenterPos.x + sprite.width*0.5);
+					var y_coordinateDifference:int = targetCenterPos.y - towerCenterPos.y;
+					var x_coordinateDifference:int = targetCenterPos.x - towerCenterPos.x;
 					var attackAngle:Number = Math.atan2(y_coordinateDifference, x_coordinateDifference) * 180/Math.PI;
 					trace("%d", attackAngle);
 
 					switch(projectileType)
 					{
 						case "projectile_basic":
-							current_projectile = new ProjectileBasic(towerPos.x + sprite.width*0.5, towerPos.y, GM.PROJECTILE_SPEED_FAST, attackAngle);
+							current_projectile = new ProjectileBasic(towerPos.x, towerPos.y, GM.PROJECTILE_SPEED_FAST, attackAngle);
 							break;
 
 						case "projectile_bomb":
-							current_projectile = new ProjectileBomb(towerPos.x + sprite.width*0.5, towerPos.y, GM.PROJECTILE_SPEED_SLOW, attackAngle);
+							current_projectile = new ProjectileBomb(towerPos.x, towerPos.y, GM.PROJECTILE_SPEED_SLOW, attackAngle);
 							break;
 					}
 					lastReloadTime = getTimer();

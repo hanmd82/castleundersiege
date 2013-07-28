@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with TexturePacker http://texturepacker.com-->
-<!-- $TexturePacker:SmartUpdate:5886433cd1174353476352a026b57599$ -->
+<!-- $TexturePacker:SmartUpdate:fe1cd81671f4786f6f878daeca155fb0$ -->
 <TextureAtlas imagePath="spritesheet.png">
     <SubTexture name="armymen" x="2" y="2" width="3" height="4"/>
     <SubTexture name="bg" x="7" y="2" width="640" height="480"/>
