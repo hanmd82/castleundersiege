@@ -1,6 +1,6 @@
 package behaviours
 {
-	import flash.utils.Dictionary;
+	
 
 	public class AStar
 	{
@@ -40,14 +40,18 @@ package behaviours
 			
 			g_score[start.id] = 0    // Cost from start along best known path.
 			// Estimated total cost from start to goal through y.
-			start.f_score = g_score[start.id] + heuristic_cost_estimate(start, goal)
+			start.f_score = g_score[start.id] + heuristic_cost_estimate(start, goal);
+				
+			trace("astar search:",start.id, goal.id);
 			
 			while( !openset.empty() )
 			{
 				// current = the node in openset having the lowest f_score[] value
 				current = openset.getMin();
 				
-				if (current == goal)
+				//trace("\n\tastar current:"+current.id);
+				
+				if (current.id == goal.id)
 					return reconstruct_path(came_from, goal)
 			
 				//remove current from openset
@@ -62,18 +66,26 @@ package behaviours
 					var neighbor:AStarNode = neighbor_nodes[n];
 					var tentative_g_score:Number = g_score[current.id] + dist_between(current,neighbor);
 					
+					//trace("neighbor:",neighbor.id, tentative_g_score);
+					
 					// if neighbor in closedset and tentative_g_score >= g_score[neighbor]
 					if(closedset[neighbor.id] != null && tentative_g_score >= g_score[neighbor.id])
+					{
+						//trace("neighbor in closedset and tentative_g_score (",tentative_g_score,") >= gscore[neighbor] (",g_score[neighbor.id],")");
 						continue;
+					}
 					
 					// if neighbor not in openset or tentative_g_score < g_score[neighbor] 
-					if(!openset.find(neighbor) || tentative_g_score < g_score[neighbor.id] )
+					var bFoundNeighbor:Boolean = openset.find(neighbor);
+					if(!bFoundNeighbor || tentative_g_score < g_score[neighbor.id] )
 					{
+						//trace("neighbor not in openset || tentative_g_score (",tentative_g_score,") < gscore[neighbor] (",g_score[neighbor.id],")");
+						
 						came_from[neighbor.id] = current;
 						g_score[neighbor.id] = tentative_g_score;
 						neighbor.f_score = g_score[neighbor.id] + heuristic_cost_estimate(neighbor, goal);
 						// if neighbor not in openset
-						if(!openset.find(neighbor))
+						if(!bFoundNeighbor)
 						{
 							//add neighbor to openset
 							openset.add(neighbor);

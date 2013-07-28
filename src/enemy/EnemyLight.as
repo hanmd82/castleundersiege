@@ -1,22 +1,21 @@
 package enemy
 {
 	import starling.display.Image;
+	
 
 	public class EnemyLight extends Enemy
 	{
-		public function EnemyLight(posX:Number, posY:Number)
+		public function EnemyLight(params:SpawnParams)
 		{
-			super();
+			super(params.route);
 			
 			var img:Image = new Image(GM.assets.getTexture("enemy_light"));
+			img.x = -img.width * 0.5;
+			img.y = -img.height * 0.5;
 			sprite.addChild(img);
-			sprite.x = posX;
-			sprite.y = posY;
 			
+			speed = 0.5;
 			hp = GM.ENEMY_HIT_POINTS_SMALL;
-
-//			speed = 5;
-//			angle = 60;
 		}
 	}
 }

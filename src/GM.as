@@ -8,7 +8,12 @@ package
 	import flash.system.Capabilities;
 	import flash.utils.getTimer;
 	
-	import projectile.*;
+	import behaviours.AStar;
+	import behaviours.AStarNode;
+	
+	import enemy.Enemy;
+	import enemy.EnemyLight;
+	import enemy.Route;
 	
 	import starling.display.DisplayObjectContainer;
 	import starling.display.Image;
@@ -20,8 +25,12 @@ package
 	import starling.textures.Texture;
 	import starling.utils.AssetManager;
 	
-	import tower.*;
-
+	import tower.Tower;
+	import tower.TowerBasic;
+	
+	import enemy.SpawnParams;
+	import enemy.Wave;
+	
 
 	/**
 	 * Game Master
@@ -57,7 +66,8 @@ package
 		public static var prevTouchedTile:Image;
 		public static var prevTouchedGX:int;
 		public static var prevTouchedGY:int;
-		public static const TILE_TINT_COLOR:uint = 0x993300;
+		public static const TILE_TINT_VALID_COLOR:uint = 0x339933;
+		public static const TILE_TINT_INVALID_COLOR:uint = 0x993300;
 		
 		// towers		
 		// TOWER ATTACK DATA
@@ -92,12 +102,15 @@ package
 		public static const ENEMY_HIT_POINTS_LARGE:uint  = 75;
 
 		public static var enemies:Vector.<Enemy>;
+		public static var routes:Vector.<Route>;
+		public static var astar:AStar;
+		
+		// castle home
+		public static const CASTLE_HP_MAX:int = 120;
+		public static var castle:Castle;
 
 		// waves
-		
-		// player
-		public static const PLAYER_HP_MAX:int = 120;
-		public static var playerHP:int;
+		public static var wavesQueue:Vector.<Wave>;
 		
 		public function GM()
 		{
@@ -133,6 +146,10 @@ package
 			towers      = new Vector.<Tower>();
 			projectiles = new Vector.<Projectile>();
 			enemies     = new Vector.<Enemy>();
+			routes		= new Vector.<Route>();
+			wavesQueue	= new Vector.<Wave>();
+			
+			astar = new AStar(); 
 			
 //			var tf:TextField = new TextField(500, 300, "hello world");
 //			root.addChild(tf);
@@ -160,9 +177,32 @@ package
 			// draw grid
 			
 			
+			// init castle
+			castle = new Castle(gridNumCellsX/2 -1, gridNumCellsY-2); // 9, 13
 			
-			// test enemy
-			new EnemyLight(100,100);
+			// set up starting positions for route
+			// right-mid
+			routes.push(new Route(gridNumCellsX-1, (gridNumCellsY>>1), tileWidth, 0) );
+			// left-mid
+			routes.push(new Route(0, (gridNumCellsY>>1), -tileWidth, 0) );
+			// mid-top
+			routes.push(new Route( (gridNumCellsX>>1), 0, 0, -tileHeight) );
+			
+			// initialize paths
+			for(var r:int = routes.length-1; r >= 0; r--)
+			{
+				routes[r].path = astar.search(routes[r].startNode, castle.node);
+				
+				var s:String = "";
+				for(var p:int = 0; p < routes[r].path.length; p++)
+					s += " ["+routes[r].path[p].x + ","+routes[r].path[p].y+"]";
+				trace(s);
+			}
+			
+			
+			
+			setupWaves();
+			
 			
 			// play music
 			var bgm:Sound = new CastleUnderSiegeBGM();
@@ -223,19 +263,40 @@ package
 			{
 				if(gx != prevTouchedGX || gy != prevTouchedGY)
 				{
+					prevTouchedGX = gx;
+					prevTouchedGY = gy;
+					
 					// default color tint is white
 					if(prevTouchedTile)
 						prevTouchedTile.color = 0xFFFFFF;
 					
+					// first check routes are valid
+					var bValid:Boolean = true;
+					for(var r:int = routes.length-1; r >= 0; r--)
+					{
+						var path:Vector.<AStarNode> = astar.search(routes[r].startNode, castle.node);
+						if(path.length == 0)
+						{
+							bValid = false;
+							break;
+						}
+					}
+					
 					var tileImg:Image = layerBG.getChildByName("tile_"+gx+"_"+gy) as Image;
-					tileImg.color = TILE_TINT_COLOR;
+					
+					if(bValid)
+					{
+						tileImg.color = TILE_TINT_VALID_COLOR;
 					prevTouchedTile = tileImg;
-					prevTouchedGX = gx;
-					prevTouchedGY = gy;
 					//tileImg.visible = true;
 				}
+					else
+					{
+						tileImg.color = TILE_TINT_INVALID_COLOR;
 			}
-			else if(prevTouchedTile)
+				}
+			}
+			else if(prevTouchedTile) // released touch
 			{
 				prevTouchedTile.color = 0xFFFFFF;
 				prevTouchedTile = null;
@@ -243,13 +304,25 @@ package
 				if(grid[gx][gy] == null)
 				{
 					grid[gx][gy] = new TowerBasic(gx*tileWidth, gy*tileHeight);
+					
+					// whenever tower is placed, we have to re-route
 				}
 			}
 
 
 			var i:int;
-
-			// update game objects
+			
+			// update front wave
+			if(wavesQueue.length > 0)
+			{
+				wavesQueue[0].update();
+				if(wavesQueue[0].isEnded)
+				{
+					wavesQueue.shift();
+				}
+			}
+			
+			// update enemies
 			for(i = 0; i < enemies.length; i++)
 			{
 				enemies[i].update();
@@ -280,10 +353,42 @@ package
 				else
 					c++;
 			}
+			
+			// check game over
+			if(castle.hp <= 0)
+				GM.gameEnd();
 		}
 		
 		public static function gameEnd():void
 		{
+		}
+		
+		
+		public static function setupWaves():void
+		{
+			var w:Wave;
+			var i:int;
+			
+			// wave 1
+			w = new Wave();
+			for(i=0; i < 20; i++)
+			{
+				w.add(new SpawnParams(EnemyLight, i * 45, GM.routes[0]));
+				w.add(new SpawnParams(EnemyLight, i * 45, GM.routes[1]));
+				w.add(new SpawnParams(EnemyLight, i * 45, GM.routes[2]));
+	}
+			w.endDelayFrames = 60*20; // 10s
+			wavesQueue.push(w);
+			
+			// wave 2
+			w = new Wave();
+			for(i=0; i < 20; i++)
+			{
+				w.add(new SpawnParams(EnemyLight, i * 45, GM.routes[1]));
+				w.add(new SpawnParams(EnemyLight, i * 45, GM.routes[2]));
+			}
+			w.endDelayFrames = 60*20; // 10s
+			wavesQueue.push(w);
 		}
 	}
 }

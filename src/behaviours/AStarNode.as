@@ -16,6 +16,7 @@ package behaviours
 			m_y = y;
 			// cached
 			m_id = m_x*10000+m_y; 
+			f_score = Number.MAX_VALUE;
 		}
 		
 		public function get x():int { return m_x; }
@@ -34,55 +35,52 @@ package behaviours
 				var xl:int = x-1;
 				
 				// top left
-				if(y > 0 && GM.grid[xl][y-1] == null)
-				{
-					neighbors.push(new AStarNode(xl, y-1));
-				}
+//				if(y > 0 && GM.grid[xl][y-1] == null)
+//				{
+//					neighbors.push(new AStarNode(xl, y-1));
+//				}
 				
 				// left
 				neighbors.push(new AStarNode(xl,y));
 				
 				// bottom left
-				if(y < GM.gridNumCellsY && GM.grid[xl][y+1] == null)
-				{
-					neighbors.push(new AStarNode(xl, y+1));
-				}
+//				if(y < GM.gridNumCellsY-1 && GM.grid[xl][y+1] == null)
+//				{
+//					neighbors.push(new AStarNode(xl, y+1));
+//				}
 			}
 			// right side
-			else if (x < GM.gridNumCellsX)
+			if (x < GM.gridNumCellsX-1)
 			{
 				var xr:int = x+1;
 				
 				// top right
-				if(y > 0 && GM.grid[xr][y-1] == null)
-				{
-					neighbors.push(new AStarNode(xr, y-1));
-				}
+//				if(y > 0 && GM.grid[xr][y-1] == null)
+//				{
+//					neighbors.push(new AStarNode(xr, y-1));
+//				}
 				
 				// right
 				neighbors.push(new AStarNode(xr,y));
 				
 				// bottom right
-				if(y < GM.gridNumCellsY && GM.grid[xr][y+1] == null)
-				{
-					neighbors.push(new AStarNode(xr, y+1));
-				}
+//				if(y < GM.gridNumCellsY-1 && GM.grid[xr][y+1] == null)
+//				{
+//					neighbors.push(new AStarNode(xr, y+1));
+//				}
 			}
-			else
+
+			// top
+			if(y > 0 && GM.grid[x][y-1] == null)
 			{
-				// top
-				if(y > 0 && GM.grid[x][y-1] == null)
-				{
-					neighbors.push(new AStarNode(x, y-1));
-				}
-				
-				// bottom
-				if(y < GM.gridNumCellsY && GM.grid[x][y+1] == null)
-				{
-					neighbors.push(new AStarNode(x, y+1));
-				}
+				neighbors.push(new AStarNode(x, y-1));
 			}
 			
+			// bottom
+			if(y < GM.gridNumCellsY-1 && GM.grid[x][y+1] == null)
+			{
+				neighbors.push(new AStarNode(x, y+1));
+			}
 			
 			return neighbors; 
 		}

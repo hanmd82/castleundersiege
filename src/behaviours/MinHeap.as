@@ -35,7 +35,7 @@ package behaviours
 			
 			var currIndex:int = m_array.length-1;
 			var parentIndex:int = parent(currIndex);
-			while(parentIndex != currIndex &&
+			while(parentIndex != currIndex && parentIndex >= 0 &&
 				// Compare the added element with its parent; if they are in the correct order, stop.
 				m_array[currIndex].f_score < m_array[ parentIndex ].f_score)
 			{
@@ -50,9 +50,12 @@ package behaviours
 		{
 			// Replace the root of the heap with the last element on the last level.
 			var last:AStarNode = m_array.pop();
-			m_array[0] = last;
-			// Compare the new root with its children; if they are in the correct order, stop.
-			minHeapify(0);
+			if(m_array.length > 0)
+			{
+				m_array[0] = last;
+				// Compare the new root with its children; if they are in the correct order, stop.
+				minHeapify(0);
+			}
 		}
 		
 		public function find(value:AStarNode):Boolean
@@ -69,15 +72,34 @@ package behaviours
 			return false;
 		}
 		
+		public function toString():String
+		{
+			var s:String = "minheap: ";
+			var j:int = 1;
+			var k:int = 0;
+			for(var i:int = 0; i < m_array.length; i++)
+			{
+				s+=m_array[i].f_score.toFixed(2)+"("+m_array[i].id+"),";
+				if(i == k)
+				{
+					s+= "\n";
+					j <<=1;
+					k += j;
+				}
+			}
+			s+="\n";
+			return s;
+		}
+		
 		private function minHeapify(index:int):void
 		{
 			var left:int = childLeft(index);
 			var right:int = childRight(index);
 			var smallest:int = index;
 			
-			if ( left < m_array.length && m_array[left] < m_array[smallest] )
+			if ( left < m_array.length && m_array[left].f_score < m_array[smallest].f_score )
 				smallest = left;
-			if ( right < m_array.length && m_array[right] < m_array[smallest] )
+			if ( right < m_array.length && m_array[right].f_score < m_array[smallest].f_score )
 				smallest = right;
 			
 			if (smallest != index)
