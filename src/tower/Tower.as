@@ -30,6 +30,12 @@ package tower
 			GM.towers.push(this);
 			GM.layerGame.addChild(sprite);
 		}
+		
+		public function destroy():void
+		{
+			sprite.removeFromParent(true);
+			sprite = null;
+		}
 
 		public function scanforEnemies():Vector.<Enemy>
 		{

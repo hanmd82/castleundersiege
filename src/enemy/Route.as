@@ -13,6 +13,8 @@ package enemy
 		public var path:Vector.<AStarNode>;
 		public var temp_path:Vector.<AStarNode>;
 		
+		private var img:Image;
+		
 		public function Route(startGX:int, startGY:int, offsetX:Number, offsetY:Number)
 		{
 			path = null;
@@ -23,10 +25,17 @@ package enemy
 			var sprite:Sprite = new Sprite();
 			GM.layerGame.addChild(sprite);
 			
-			var img:Image= new Image(GM.assets.getTexture("projectile_bomb"));
+			img = new Image(GM.assets.getTexture("tile"));
+			img.color = 0xffd22a;
 			sprite.addChild(img);
 			img.x = startGX * GM.tileWidth;
 			img.y = startGY * GM.tileHeight;
-		}		
+		}
+		
+		public function destroy():void
+		{
+			img.removeFromParent(true);
+			img = null;
+		}
 	}
 }

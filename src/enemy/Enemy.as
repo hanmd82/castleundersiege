@@ -44,8 +44,8 @@ package enemy
 		
 		public function destroy():void
 		{
-			bMarkedForDestroy = true;
-			GM.layerGame.removeChild(sprite);
+			sprite.removeFromParent(true);
+			sprite = null;
 		}
 		
 		public function explode():void

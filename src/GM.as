@@ -25,9 +25,12 @@ package
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
+	import starling.text.TextField;
 	import starling.textures.Texture;
 	import starling.utils.AssetManager;
-
+	import starling.utils.HAlign;
+	import starling.utils.VAlign;
+	
 	import tower.Tower;
 	import tower.TowerBasic;
 
@@ -102,16 +105,17 @@ package
 		public static const ENEMY_HIT_POINTS_LIGHT:uint = 15;
 		public static const ENEMY_HIT_POINTS_HEAVY:uint = 75;
 		public static const ENEMY_HIT_POINTS_KAMI:uint  = 40;
-		public static const ENEMY_SPEED_LIGHT:Number    = 0.5;
-		public static const ENEMY_SPEED_HEAVY:Number    = 0.1;
-		public static const ENEMY_SPEED_KAMI:Number     = 0.1;
+		public static const ENEMY_SPEED_LIGHT:Number  = 0.5;
+		public static const ENEMY_SPEED_HEAVY:Number = 0.16;
+		public static const ENEMY_SPEED_KAMI:Number  = 0.1;
 		public static var enemies:Vector.<Enemy>;
 		public static var routes:Vector.<Route>;
 		public static var astar:AStar;
 		
 		// castle home
-		public static const CASTLE_HP_MAX:int = 120;
+		public static const CASTLE_HP_MAX:int = 125;
 		public static var castle:Castle;
+		public static var castleHPText:TextField;
 
 		// waves
 		public static var wavesQueue:Vector.<Wave>;
@@ -172,15 +176,15 @@ package
 			for(var x:int = 0; x < gridNumCellsX; x++)
 			{
 				grid[x] = new Array(gridNumCellsY);
-				for(var y:int = 0; y < gridNumCellsY; y++)
-				{
+//				for(var y:int = 0; y < gridNumCellsY; y++)
+//				{
 					//grid[x][y]
 //					var tileImg:Image = new Image(tileTex);
 //					tileImg.name = "tile_"+x+"_"+y;
 //					tileImg.x = x*tileWidth;
 //					tileImg.y = y*tileHeight;
 //					layerBG.addChild(tileImg);
-				}
+//				}
 			}
 			// draw grid
 			
@@ -201,7 +205,7 @@ package
 			{
 				routes[r].path = astar.search(routes[r].startNode, castle.node);
 				
-				var s:String = "";
+				var s:String = "route["+r+"] = ";
 				for(var p:int = 0; p < routes[r].path.length; p++)
 					s += " ["+routes[r].path[p].x + ","+routes[r].path[p].y+"]";
 				trace(s);
@@ -210,6 +214,19 @@ package
 			
 			
 			setupWaves();
+			
+			
+			// setup ui
+			var castleHPIcon:Image = new Image(assets.getTexture("ui_castle_hp"));
+			castleHPIcon.x = 10;
+			castleHPIcon.y = 5;
+			layerUI.addChild(castleHPIcon);
+			castleHPText = new TextField(100, 30, "x "+castle.hp, "04b03", 24, 0x15191a);
+			castleHPText.x = 41;
+			castleHPText.y = 14;
+			castleHPText.hAlign = HAlign.LEFT;
+			castleHPText.vAlign = VAlign.TOP;
+			layerUI.addChild(castleHPText);
 			
 			
 			// play music
@@ -354,7 +371,7 @@ package
 				else
 					c++;
 			}
-
+			
 			for(c = 0; c < projectiles.length; )
 			{
 				if(projectiles[c].bMarkedForDestroy)
@@ -365,7 +382,10 @@ package
 				else
 					c++;
 			}
-
+			
+			// update ui
+			castleHPText.text = "x "+castle.hp.toString();
+			
 			// check game over
 			if(castle.hp <= 0)
 				GM.gameEnd();
@@ -405,6 +425,31 @@ package
 		
 		public static function gameEnd():void
 		{
+			// stop update
+			root.removeEventListener(Event.ENTER_FRAME, gameUpdate);
+			
+			// clear off all entities
+			var i:int;
+			for(i = enemies.length-1; i >=0; i--)
+			{
+				enemies.pop().destroy();
+			}
+			for(i = towers.length-1; i>=0; i--)
+			{
+				towers.pop().destroy();
+			}
+			for(i = projectiles.length-1; i>=0; i--)
+			{
+				projectiles.pop().destroy();
+			}
+			for(i = routes.length-1; i>=0; i--)
+			{
+				routes.pop().destroy();
+			}
+			for(i = wavesQueue.length-1; i>=0; i--)
+			{
+				wavesQueue.pop().destroy();
+			}
 		}
 		
 		
@@ -418,9 +463,9 @@ package
 			for(i=0; i < 20; i++)
 			{
 				w.add(new SpawnParams(EnemyLight, i * 45, GM.routes[0]));
-				w.add(new SpawnParams(EnemyHeavy, i * 45, GM.routes[1]));
+				w.add(new SpawnParams(EnemyHeavy, i * 45 * 3, GM.routes[1]));
 				w.add(new SpawnParams(EnemyLight, i * 45, GM.routes[2]));
-	}
+			}
 			w.endDelayFrames = 60*20; // 10s
 			wavesQueue.push(w);
 			

@@ -14,6 +14,12 @@ package enemy
 			endDelayFrames = 60;
 		}
 		
+		public function destroy():void
+		{
+			while(m_spawnSchedule.length> 0)
+				m_spawnSchedule.pop();
+		}
+		
 		public function get isEnded():Boolean
 		{
 			return (m_spawnSchedule.length == 0 && endDelayFrames <= 0);
@@ -21,7 +27,15 @@ package enemy
 		
 		public function add(value:SpawnParams):void
 		{
-			m_spawnSchedule.push(value);
+			// insert sort
+			var i:int = 0;
+			for(i = m_spawnSchedule.length-1; i >=0; i--)
+			{
+				if(m_spawnSchedule[i].frame <= value.frame)
+					break;
+			}
+			
+			m_spawnSchedule.splice(i+1,0, value);
 		}
 		
 		public function update():void

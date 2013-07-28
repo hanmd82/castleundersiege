@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
-<!-- $TexturePacker:SmartUpdate:1866b0d7a054458cd226116087084a76$ -->
+<!-- Created with TexturePacker http://texturepacker.com-->
+<!-- $TexturePacker:SmartUpdate:5886433cd1174353476352a026b57599$ -->
 <TextureAtlas imagePath="spritesheet.png">
-    <SubTexture name="bg" x="2" y="2" width="640" height="480"/>
-    <SubTexture name="castle" x="644" y="2" width="148" height="138"/>
-    <SubTexture name="enemy_heavy" x="794" y="2" width="16" height="16"/>
-    <SubTexture name="enemy_light" x="812" y="2" width="16" height="16"/>
-    <SubTexture name="projectile_basic" x="830" y="2" width="10" height="10"/>
-    <SubTexture name="projectile_bomb" x="842" y="2" width="32" height="32"/>
-    <SubTexture name="tile" x="876" y="2" width="32" height="32"/>
-    <SubTexture name="tower_basic" x="910" y="2" width="32" height="32"/>
-    <SubTexture name="tower_cannon" x="944" y="2" width="32" height="32"/>
-    <SubTexture name="tower_longbow" x="978" y="2" width="32" height="32"/>
+    <SubTexture name="armymen" x="2" y="2" width="3" height="4"/>
+    <SubTexture name="bg" x="7" y="2" width="640" height="480"/>
+    <SubTexture name="castle" x="649" y="2" width="148" height="138"/>
+    <SubTexture name="enemy_heavy" x="799" y="2" width="27" height="22"/>
+    <SubTexture name="enemy_light" x="828" y="2" width="12" height="24"/>
+    <SubTexture name="projectile_basic" x="842" y="2" width="10" height="10"/>
+    <SubTexture name="projectile_bomb" x="854" y="2" width="32" height="32"/>
+    <SubTexture name="tile" x="888" y="2" width="32" height="32"/>
+    <SubTexture name="tower_basic" x="922" y="2" width="25" height="23"/>
+    <SubTexture name="tower_cannon" x="949" y="2" width="20" height="27"/>
+    <SubTexture name="tower_longbow" x="971" y="2" width="27" height="30"/>
+    <SubTexture name="ui_castle_hp" x="1000" y="2" width="17" height="36"/>
+    <SubTexture name="ui_instructions" x="2" y="484" width="468" height="266"/>
 </TextureAtlas>

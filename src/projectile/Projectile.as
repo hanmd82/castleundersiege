@@ -58,7 +58,11 @@ package projectile
 		public function destroy():void
 		{
 			bMarkedForDestroy = true;
-			GM.layerGame.removeChild(sprite);
+			if(sprite)
+			{
+				sprite.removeFromParent(true);
+				sprite = null;
+			}
 		}
 		
 		public function update():void

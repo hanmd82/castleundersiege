@@ -146,7 +146,7 @@
         </struct>
         <key>fileList</key>
         <array>
-            <filename></filename>
+            <filename>sprites</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
