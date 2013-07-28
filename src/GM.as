@@ -1,15 +1,14 @@
 package
 {
+	import enemy.*;
+
 	import flash.geom.Point;
 	import flash.media.Sound;
 	import flash.media.SoundTransform;
 	import flash.system.Capabilities;
 	import flash.utils.getTimer;
 	
-	import enemy.Enemy;
-	import enemy.EnemyLight;
-	
-	import projectile.Projectile;
+	import projectile.*;
 	
 	import starling.display.DisplayObjectContainer;
 	import starling.display.Image;
@@ -22,8 +21,6 @@ package
 	import starling.utils.AssetManager;
 	
 	import tower.*;
-	import projectile.*;
-	import enemy.*;
 
 
 	/**
@@ -248,7 +245,7 @@ package
 
 			var i:int;
 
-			// update enemies
+			// update game objects
 			for(i = 0; i < enemies.length; i++)
 			{
 				enemies[i].update();
@@ -261,7 +258,9 @@ package
 
 			for(i = 0; i < towers.length; i++)
 			{
-				towers[i].update();
+				towers[i].update(); // health, damage and reloading status
+				var enemiesInRange:Vector.<Enemy> = towers[i].scanforEnemies();
+				towers[i].shoot(enemiesInRange);
 			}
 
 

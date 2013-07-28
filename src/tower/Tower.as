@@ -1,11 +1,13 @@
 package tower
 {
+	import enemy.Enemy;
+
 	import flash.geom.Point;
 	import flash.utils.getTimer;
-	import starling.display.Sprite;
 
 	import projectile.*;
-	import enemy.Enemy;
+
+	import starling.display.Sprite;
 
 	public class Tower
 	{
@@ -29,7 +31,7 @@ package tower
 			GM.layerGame.addChild(sprite);
 		}
 
-		public function detectEnemies():Vector.<Enemy>
+		public function scanforEnemies():Vector.<Enemy>
 		{
 			var enemiesInRange:Vector.<Enemy> = new Vector.<Enemy>();
 
@@ -45,11 +47,10 @@ package tower
 			return enemiesInRange;
 		}
 
-		public function shoot():void
+		public function shoot(enemies:Vector.<Enemy>):void
 		{
 			if (isReloaded)
 			{
-				var enemies:Vector.<Enemy> = detectEnemies();
 				if (enemies.length != 0)
 				{
 					var current_projectile:Projectile;
