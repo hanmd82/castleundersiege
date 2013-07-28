@@ -20,6 +20,8 @@ package projectile
 		private var m_velocityX:Number;
 		private var m_velocityY:Number;
 		
+		private static var enemyPos:Point;
+
 		public function Projectile()
 		{
 			bMarkedForDestroy = false;
@@ -41,10 +43,13 @@ package projectile
 			var projectilePos:Point = new Point(sprite.x, sprite.y);
 			var enemiesHit:Vector.<Enemy> = new Vector.<Enemy>();
 
+			enemyPos = new Point();
+			var distance:Number;
 			for each (var e:Enemy in GM.enemies)
 			{
-				var enemyPos:Point = new Point(e.sprite.x, e.sprite.y);
-				var distance:Number = Point.distance(projectilePos, enemyPos);
+				enemyPos.x = e.sprite.x;
+				enemyPos.y = e.sprite.y;
+				distance   = Point.distance(projectilePos, enemyPos);
 				if (distance < sprite.width/2 + e.sprite.width/2)
 				{
 					enemiesHit.push(e);

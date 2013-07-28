@@ -24,6 +24,8 @@ package tower
 		public var isReloaded:Boolean;
 		public var lastReloadTime:Number;
 
+		private static var enemyPos:Point;
+
 		public function Tower()
 		{
 			sprite = new Sprite();
@@ -44,12 +46,13 @@ package tower
 			if (isReloaded)
 			{
 				// reuse point
-				var enemyPos:Point = new Point();
+				enemyPos = new Point();
+				var distance:Number;
 				for each (var e:Enemy in GM.enemies)
 				{
 					enemyPos.x = e.sprite.x;
 					enemyPos.y = e.sprite.y;
-					var distance:Number = Point.distance(towerPos, enemyPos);
+					distance   = Point.distance(towerPos, enemyPos);
 					if (distance < attackRadius)
 					{
 						enemiesInRange.push(e);
@@ -74,12 +77,13 @@ package tower
 					var currentTargetDistance:int = Point.distance(towerCenterPos, targetCenterPos);
 
 					// reuse point;
-					var enemyPos:Point = new Point();
+					enemyPos = new Point();
+					var currentEnemyDistance:Number;
 					for each (var e:Enemy in enemies)
 					{
 						enemyPos.x = e.sprite.x;
 						enemyPos.y = e.sprite.y;
-						var currentEnemyDistance:int = Point.distance(towerCenterPos, enemyPos);
+						currentEnemyDistance = Point.distance(towerCenterPos, enemyPos);
 						if (currentEnemyDistance < currentTargetDistance)
 						{
 							target = e;

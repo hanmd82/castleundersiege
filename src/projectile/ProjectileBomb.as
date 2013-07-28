@@ -8,6 +8,8 @@ package projectile
 
 	public class ProjectileBomb extends Projectile
 	{
+		private static var enemyPos:Point;
+
 		public function ProjectileBomb(posX:Number, posY:Number, initialSpeed:Number, initialAngle:Number)
 		{
 			super();
@@ -27,10 +29,13 @@ package projectile
 		{
 			// causes splash damage on all enemies within range
 			var projectilePos:Point = new Point(sprite.x, sprite.y);
+			enemyPos = new Point();
+			var distance:Number;
 			for each (var e:Enemy in GM.enemies)
 			{
-				var enemyPos:Point = new Point(e.sprite.x, e.sprite.y);
-				var distance:Number = Point.distance(projectilePos, enemyPos);
+				enemyPos.x = e.sprite.x;
+				enemyPos.y = e.sprite.y;
+				distance   = Point.distance(projectilePos, enemyPos);
 				if (distance < damageRadius)
 				{
 					e.sustainDamage(damage);
