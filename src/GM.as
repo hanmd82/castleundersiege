@@ -1,23 +1,23 @@
 package
 {
-	import flash.geom.Point;
-	import flash.media.Sound;
-	import flash.media.SoundTransform;
-	import flash.system.Capabilities;
-	import flash.utils.getTimer;
-	
 	import behaviours.AStar;
 	import behaviours.AStarNode;
-	
+
 	import enemy.Enemy;
 	import enemy.EnemyHeavy;
 	import enemy.EnemyLight;
 	import enemy.Route;
 	import enemy.SpawnParams;
 	import enemy.Wave;
-	
+
+	import flash.geom.Point;
+	import flash.media.Sound;
+	import flash.media.SoundTransform;
+	import flash.system.Capabilities;
+	import flash.utils.getTimer;
+
 	import projectile.Projectile;
-	
+
 	import starling.display.DisplayObjectContainer;
 	import starling.display.Image;
 	import starling.display.Sprite;
@@ -27,10 +27,10 @@ package
 	import starling.events.TouchPhase;
 	import starling.textures.Texture;
 	import starling.utils.AssetManager;
-	
+
 	import tower.Tower;
 	import tower.TowerBasic;
-	
+
 
 	/**
 	 * Game Master
@@ -43,6 +43,8 @@ package
 		public static const tileHeight:int = 32;
 		public static const gridNumCellsX:int = 20;
 		public static const gridNumCellsY:int = 15;
+		public static const canvasWidth:int = tileWidth * gridNumCellsX;
+		public static const canvasHeight:int = tileHeight * gridNumCellsY;
 		public static var grid:Array;
 
 		public static var root:DisplayObjectContainer;
@@ -71,13 +73,13 @@ package
 		
 		// towers		
 		// TOWER ATTACK DATA
-		public static const TOWER_DETECTION_RADIUS_SMALL:uint  = 5;
-		public static const TOWER_DETECTION_RADIUS_MEDIUM:uint = 7;
-		public static const TOWER_DETECTION_RADIUS_LARGE:uint  = 10;
+		public static const TOWER_DETECTION_RADIUS_SMALL:uint  = 100;
+		public static const TOWER_DETECTION_RADIUS_MEDIUM:uint = 250;
+		public static const TOWER_DETECTION_RADIUS_LARGE:uint  = 500;
 
-		public static const TOWER_RELOAD_INTERVAL_MS_SLOW:uint   = 5000;
-		public static const TOWER_RELOAD_INTERVAL_MS_MEDIUM:uint = 2500;
-		public static const TOWER_RELOAD_INTERVAL_MS_FAST:uint   = 1000;
+		public static const TOWER_RELOAD_INTERVAL_MS_SLOW:uint   = 2000;
+		public static const TOWER_RELOAD_INTERVAL_MS_MEDIUM:uint = 1000;
+		public static const TOWER_RELOAD_INTERVAL_MS_FAST:uint   = 500;
 
 		public static var towers:Vector.<Tower>;
 
@@ -90,19 +92,19 @@ package
 		public static const PROJECTILE_DAMAGE_MEDIUM:uint = 20;
 		public static const PROJECTILE_DAMAGE_HEAVY:uint  = 30;
 
-		public static const PROJECTILE_DAMAGE_RADIUS_SMALL:uint  = 1;
-		public static const PROJECTILE_DAMAGE_RADIUS_MEDIUM:uint = 3;
-		public static const PROJECTILE_DAMAGE_RADIUS_LARGE:uint  = 5;
+		public static const PROJECTILE_DAMAGE_RADIUS_SMALL:uint  = 10;
+		public static const PROJECTILE_DAMAGE_RADIUS_MEDIUM:uint = 30;
+		public static const PROJECTILE_DAMAGE_RADIUS_LARGE:uint  = 50;
 
 		public static var projectiles:Vector.<Projectile>;
 
 		// enemies
-		public static const ENEMY_HIT_POINTS_LIGHT:uint  = 15;
+		public static const ENEMY_HIT_POINTS_LIGHT:uint = 15;
 		public static const ENEMY_HIT_POINTS_HEAVY:uint = 75;
 		public static const ENEMY_HIT_POINTS_KAMI:uint  = 40;
-		public static const ENEMY_SPEED_LIGHT:Number  = 0.5;
-		public static const ENEMY_SPEED_HEAVY:Number = 0.1;
-		public static const ENEMY_SPEED_KAMI:Number  = 0.1;
+		public static const ENEMY_SPEED_LIGHT:Number    = 0.5;
+		public static const ENEMY_SPEED_HEAVY:Number    = 0.1;
+		public static const ENEMY_SPEED_KAMI:Number     = 0.1;
 		public static var enemies:Vector.<Enemy>;
 		public static var routes:Vector.<Route>;
 		public static var astar:AStar;
@@ -302,6 +304,10 @@ package
 						routes[r].path = routes[r].temp_path;
 					}
 				}
+				else
+				{
+					// show tower upgrade UI
+				}
 			}
 
 
@@ -348,7 +354,18 @@ package
 				else
 					c++;
 			}
-			
+
+			for(c = 0; c < projectiles.length; )
+			{
+				if(projectiles[c].bMarkedForDestroy)
+				{
+					projectiles[c].destroy();
+					projectiles.splice(c,1);
+				}
+				else
+					c++;
+			}
+
 			// check game over
 			if(castle.hp <= 0)
 				GM.gameEnd();

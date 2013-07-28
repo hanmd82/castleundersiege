@@ -1,12 +1,12 @@
 package tower
 {
 	import enemy.Enemy;
-
+	
 	import flash.geom.Point;
 	import flash.utils.getTimer;
-
+	
 	import projectile.*;
-
+	
 	import starling.display.Sprite;
 
 	public class Tower
@@ -35,13 +35,17 @@ package tower
 		{
 			var enemiesInRange:Vector.<Enemy> = new Vector.<Enemy>();
 
-			for each (var e:Enemy in GM.enemies)
+			if (isReloaded)
 			{
-				var enemyPos:Point = new Point(e.sprite.x, e.sprite.y);
-				var distance:Number = Point.distance(towerPos, enemyPos);
-				if (distance < attackRadius)
+				for each (var e:Enemy in GM.enemies)
 				{
-					enemiesInRange.push(e);
+					var enemyPos:Point = new Point(e.sprite.x, e.sprite.y);
+					var distance:Number = Point.distance(towerPos, enemyPos);
+					if (distance < attackRadius)
+					{
+						enemiesInRange.push(e);
+						trace("detecting");
+					}
 				}
 			}
 			return enemiesInRange;
@@ -55,22 +59,23 @@ package tower
 				{
 					var current_projectile:Projectile;
 					var target:Enemy = enemies[0];
-					var targetPos:Point = new Point(target.sprite.x, target.sprite.y);
+					var targetCenterPos:Point = new Point(target.sprite.x + target.sprite.width/2, target.sprite.y + target.sprite.height/2);
 
-					var attackAngle:Number = Math.atan2(targetPos.y - towerPos.y, targetPos.x - towerPos.x);
+					var towerCenterPos:Point = new Point(sprite.x + sprite.width/2, sprite.y + sprite.y/2);
+					var attackAngle:Number = Math.atan2(targetCenterPos.y - towerCenterPos.y, targetCenterPos.x - towerCenterPos.x);
 
 					switch(projectileType)
 					{
 						case "projectile_basic":
-							current_projectile = new ProjectileBasic(towerPos.x, towerPos.y, GM.PROJECTILE_SPEED_FAST, attackAngle);
-							lastReloadTime = getTimer();
+							current_projectile = new ProjectileBasic(towerPos.x + sprite.width*0.5, towerPos.y, GM.PROJECTILE_SPEED_FAST, attackAngle);
 							break;
 
 						case "projectile_bomb":
-							current_projectile = new ProjectileBomb(towerPos.x, towerPos.y, GM.PROJECTILE_SPEED_SLOW, attackAngle);
-							lastReloadTime = getTimer();
+							current_projectile = new ProjectileBomb(towerPos.x + sprite.width*0.5, towerPos.y, GM.PROJECTILE_SPEED_SLOW, attackAngle);
 							break;
 					}
+					lastReloadTime = getTimer();
+					isReloaded = false;
 				}
 			}
 		}

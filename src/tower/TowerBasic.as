@@ -1,7 +1,8 @@
 package tower
 {
 	import flash.geom.Point;
-
+	import flash.utils.getTimer;
+	
 	import starling.display.Image;
 
 	public class TowerBasic extends Tower
@@ -16,17 +17,18 @@ package tower
 			projectileType    = "projectile_basic";
 
 			img = new Image(GM.assets.getTexture("tower_basic"));
-			towerPos = new Point(posX, posY);
+			towerPos = new Point(posX + img.width*0.5, posY + img.height*0.5);
 
 			sprite.addChild(img);
-			sprite.x = posX;
-			sprite.y = posY;
+			sprite.x = posX + img.width*0.5;
+			sprite.y = posY + img.height*0.5;
 
 			attackRadius   = GM.TOWER_DETECTION_RADIUS_SMALL;
 			attackInterval = GM.TOWER_RELOAD_INTERVAL_MS_MEDIUM;
 			numProjectiles = 1;
 
 			isReloaded = false;
+			lastReloadTime = getTimer();
 		}
 
 		public function upgrade(newTowerAttributeSet:String):void

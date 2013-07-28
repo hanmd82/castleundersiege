@@ -65,12 +65,19 @@ package projectile
 		{
 			sprite.x += m_velocityX;
 			sprite.y += m_velocityY;
-
-			var enemiesHit:Vector.<Enemy> = checkCollision();
-			if (enemiesHit.length != 0)
+			
+			if (sprite.x > GM.canvasWidth || sprite.y > GM.canvasHeight)
 			{
-				dealDamage(enemiesHit);
 				destroy();
+			}
+			else
+			{
+				var enemiesHit:Vector.<Enemy> = checkCollision();
+				if (enemiesHit.length != 0)
+				{
+					dealDamage(enemiesHit);
+					destroy();
+				}
 			}
 		}
 		

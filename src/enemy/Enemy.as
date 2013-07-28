@@ -51,6 +51,7 @@ package enemy
 		public function explode():void
 		{
 			bMarkedForDestroy= true;
+			GM.layerGame.removeChild(sprite);
 			
 			// throw particles
 		}
@@ -139,7 +140,7 @@ package enemy
 		public function sustainDamage(damage:Number):void
 		{
 			hp -= damage;
-			if (hp < 0)
+			if (hp <= 0)
 			{
 				explode();
 			}
