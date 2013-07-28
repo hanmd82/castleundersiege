@@ -244,16 +244,27 @@ package
 					grid[gx][gy] = new TowerBasic(gx*tileWidth, gy*tileHeight);
 				}
 			}
-			
-			
+
+
 			var i:int;
-			
+
 			// update enemies
 			for(i = 0; i < enemies.length; i++)
 			{
 				enemies[i].update();
 			}
-			
+
+			for(i = 0; i < projectiles.length; i++)
+			{
+				projectiles[i].update();
+			}
+
+			for(i = 0; i < towers.length; i++)
+			{
+				towers[i].update();
+			}
+
+
 			// clean up
 			var c:int;
 			for(c = 0; c < enemies.length; )

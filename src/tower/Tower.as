@@ -1,10 +1,11 @@
 package tower
 {
+	import flash.geom.Point;
+	import flash.utils.getTimer;
+	import starling.display.Sprite;
+
 	import projectile.*;
 	import enemy.Enemy;
-
-	import flash.geom.Point;
-	import starling.display.Sprite;
 
 	public class Tower
 	{
@@ -61,13 +62,25 @@ package tower
 					{
 						case "projectile_basic":
 							current_projectile = new ProjectileBasic(towerPos.x, towerPos.y, GM.PROJECTILE_SPEED_FAST, attackAngle);
+							lastReloadTime = getTimer();
 							break;
 
 						case "projectile_bomb":
 							current_projectile = new ProjectileBomb(towerPos.x, towerPos.y, GM.PROJECTILE_SPEED_SLOW, attackAngle);
+							lastReloadTime = getTimer();
 							break;
 					}
 				}
+			}
+		}
+
+		public function update():void
+		{
+			var currMS:Number = getTimer();
+			var elapsedLoadingTime:Number = currMS - lastReloadTime;
+			if ( isReloaded == false && elapsedLoadingTime > attackInterval )
+			{
+				isReloaded = true;
 			}
 		}
 	}
