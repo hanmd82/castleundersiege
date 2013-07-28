@@ -237,7 +237,7 @@ package
 				
 				if(grid[gx][gy] == null)
 				{
-					grid[gx][gy] = new TowerLongbow(gx*tileWidth, gy*tileHeight);
+					grid[gx][gy] = new TowerBasic(gx*tileWidth, gy*tileHeight);
 				}
 			}
 			
