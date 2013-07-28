@@ -90,16 +90,16 @@ package tower
 					var y_coordinateDifference:int = targetCenterPos.y - towerCenterPos.y;
 					var x_coordinateDifference:int = targetCenterPos.x - towerCenterPos.x;
 					var attackAngle:Number = Math.atan2(y_coordinateDifference, x_coordinateDifference) * 180/Math.PI;
-					trace("%d", attackAngle);
+					// trace("%d", attackAngle);
 
 					switch(projectileType)
 					{
 						case "projectile_basic":
-							current_projectile = new ProjectileBasic(towerPos.x, towerPos.y, GM.PROJECTILE_SPEED_FAST, attackAngle);
+							current_projectile = new ProjectileBasic(towerPos.x, towerPos.y - sprite.height*0.5, GM.PROJECTILE_SPEED_FAST, attackAngle);
 							break;
 
 						case "projectile_bomb":
-							current_projectile = new ProjectileBomb(towerPos.x, towerPos.y, GM.PROJECTILE_SPEED_SLOW, attackAngle);
+							current_projectile = new ProjectileBomb(towerPos.x, towerPos.y - sprite.height*0.5, GM.PROJECTILE_SPEED_SLOW, attackAngle);
 							break;
 					}
 					lastReloadTime = getTimer();
