@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with TexturePacker http://texturepacker.com-->
-<!-- $TexturePacker:SmartUpdate:743bb7c6e0d588e93399d8e7a545561f$ -->
+<!-- $TexturePacker:SmartUpdate:e03f724d88b2a0e2b45e5206040172d4$ -->
 <TextureAtlas imagePath="spritesheet.png">
-    <SubTexture name="enemy_heavy" x="2" y="2" width="16" height="16"/>
-    <SubTexture name="enemy_light" x="20" y="2" width="16" height="16"/>
-    <SubTexture name="projectile_basic" x="38" y="2" width="11" height="32"/>
-    <SubTexture name="projectile_bomb" x="51" y="2" width="32" height="32"/>
-    <SubTexture name="tile" x="85" y="2" width="32" height="32"/>
-    <SubTexture name="tower_basic" x="2" y="36" width="32" height="32"/>
-    <SubTexture name="tower_cannon" x="36" y="36" width="32" height="32"/>
-    <SubTexture name="tower_longbow" x="70" y="36" width="32" height="32"/>
+    <SubTexture name="castle" x="2" y="2" width="148" height="138"/>
+    <SubTexture name="enemy_heavy" x="152" y="2" width="16" height="16"/>
+    <SubTexture name="enemy_light" x="170" y="2" width="16" height="16"/>
+    <SubTexture name="projectile_basic" x="188" y="2" width="11" height="32"/>
+    <SubTexture name="projectile_bomb" x="201" y="2" width="32" height="32"/>
+    <SubTexture name="tile" x="2" y="142" width="32" height="32"/>
+    <SubTexture name="tower_basic" x="36" y="142" width="32" height="32"/>
+    <SubTexture name="tower_cannon" x="70" y="142" width="32" height="32"/>
+    <SubTexture name="tower_longbow" x="104" y="142" width="32" height="32"/>
 </TextureAtlas>
