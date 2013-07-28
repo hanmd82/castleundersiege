@@ -17,11 +17,11 @@ package projectile
 			sprite.x = posX;
 			sprite.y = posY;
 
-			this.speed = initialSpeed;
-			this.angle = initialAngle;
+			speed = initialSpeed;
+			angle = initialAngle;
 
 			damage = GM.PROJECTILE_DAMAGE_HEAVY;
-			damageRadius = GM.PROJECTILE_HIT_RADIUS_MEDIUM;
+			damageRadius = GM.PROJECTILE_DAMAGE_RADIUS_MEDIUM;
 		}
 
 		public override function dealDamage(enemiesHit:Vector.<Enemy>):void

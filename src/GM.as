@@ -61,13 +61,13 @@ package
 		
 		// towers		
 		// TOWER ATTACK DATA
-		public static const TOWER_ATTACK_RADIUS_SMALL:uint  = 5;
-		public static const TOWER_ATTACK_RADIUS_MEDIUM:uint = 10;
-		public static const TOWER_ATTACK_RADIUS_LARGE:uint  = 20;
+		public static const TOWER_DETECTION_RADIUS_SMALL:uint  = 5;
+		public static const TOWER_DETECTION_RADIUS_MEDIUM:uint = 7;
+		public static const TOWER_DETECTION_RADIUS_LARGE:uint  = 10;
 
-		public static const TOWER_ATTACK_INTERVAL_SLOW:uint   = 20;
-		public static const TOWER_ATTACK_INTERVAL_MEDIUM:uint = 10;
-		public static const TOWER_ATTACK_INTERVAL_FAST:uint   = 5;
+		public static const TOWER_RELOAD_INTERVAL_MS_SLOW:uint   = 5000;
+		public static const TOWER_RELOAD_INTERVAL_MS_MEDIUM:uint = 2500;
+		public static const TOWER_RELOAD_INTERVAL_MS_FAST:uint   = 1000;
 
 		public static var towers:Vector.<Tower>;
 
@@ -80,13 +80,17 @@ package
 		public static const PROJECTILE_DAMAGE_MEDIUM:uint = 20;
 		public static const PROJECTILE_DAMAGE_HEAVY:uint  = 30;
 
-		public static const PROJECTILE_HIT_RADIUS_SMALL:uint  = 1;
-		public static const PROJECTILE_HIT_RADIUS_MEDIUM:uint = 3;
-		public static const PROJECTILE_HIT_RADIUS_LARGE:uint  = 5;
+		public static const PROJECTILE_DAMAGE_RADIUS_SMALL:uint  = 1;
+		public static const PROJECTILE_DAMAGE_RADIUS_MEDIUM:uint = 3;
+		public static const PROJECTILE_DAMAGE_RADIUS_LARGE:uint  = 5;
 
 		public static var projectiles:Vector.<Projectile>;
 
 		// enemies
+		public static const ENEMY_HIT_POINTS_SMALL:uint  = 15;
+		public static const ENEMY_HIT_POINTS_MEDIUM:uint = 40;
+		public static const ENEMY_HIT_POINTS_LARGE:uint  = 75;
+
 		public static var enemies:Vector.<Enemy>;
 
 		// waves

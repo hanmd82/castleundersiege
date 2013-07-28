@@ -21,8 +21,8 @@ package tower
 			sprite.x = posX;
 			sprite.y = posY;
 
-			attackRadius   = GM.TOWER_ATTACK_RADIUS_SMALL;
-			attackInterval = GM.TOWER_ATTACK_INTERVAL_MEDIUM;
+			attackRadius   = GM.TOWER_DETECTION_RADIUS_SMALL;
+			attackInterval = GM.TOWER_RELOAD_INTERVAL_MS_MEDIUM;
 			numProjectiles = 1;
 
 			isReloaded = false;
@@ -40,8 +40,8 @@ package tower
 						towerAttributeSet = "tower_longbow";
 						projectileType    = "projectile_basic";
 						img.texture       = GM.assets.getTexture("tower_longbow");
-						attackRadius      = GM.TOWER_ATTACK_RADIUS_LARGE;
-						attackInterval    = GM.TOWER_ATTACK_INTERVAL_MEDIUM;
+						attackRadius      = GM.TOWER_DETECTION_RADIUS_LARGE;
+						attackInterval    = GM.TOWER_RELOAD_INTERVAL_MS_MEDIUM;
 						break;
 
 					case "tower_cannon":
@@ -49,8 +49,8 @@ package tower
 						towerAttributeSet = "tower_cannon";
 						projectileType    = "projectile_bomb";
 						img.texture       = GM.assets.getTexture("tower_cannon");
-						attackRadius      = GM.TOWER_ATTACK_RADIUS_SMALL;
-						attackInterval    = GM.TOWER_ATTACK_INTERVAL_SLOW;
+						attackRadius      = GM.TOWER_DETECTION_RADIUS_SMALL;
+						attackInterval    = GM.TOWER_RELOAD_INTERVAL_MS_SLOW;
 						break;
 				}
 			}

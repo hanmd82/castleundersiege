@@ -13,6 +13,8 @@ package enemy
 			sprite.x = posX;
 			sprite.y = posY;
 			
+			hp = GM.ENEMY_HIT_POINTS_SMALL;
+
 //			speed = 5;
 //			angle = 60;
 		}
