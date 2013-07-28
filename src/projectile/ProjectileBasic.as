@@ -1,11 +1,11 @@
 package projectile
 {
+	import enemy.Enemy;
+
 	import starling.display.Image;
 
 	public class ProjectileBasic extends Projectile
 	{
-		// damages a point target on hit
-
 		public function ProjectileBasic(posX:Number, posY:Number, initialSpeed:Number, initialAngle:Number)
 		{
 			super();
@@ -20,6 +20,13 @@ package projectile
 
 			damage = GM.PROJECTILE_DAMAGE_LIGHT;
 			damageRadius = GM.PROJECTILE_HIT_RADIUS_SMALL;
+		}
+
+		public override function dealDamage(enemiesHit:Vector.<Enemy>):void
+		{
+			// damages a point target on hit
+			var e:Enemy = enemiesHit[0];
+			e.sustainDamage(damage);
 		}
 	}
 }

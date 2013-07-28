@@ -63,5 +63,14 @@ package enemy
 			m_velocityX = m_speed * Math.cos((Math.PI/180) * m_angle);
 			m_velocityY = m_speed * Math.sin((Math.PI/180) * m_angle);
 		}
+
+		public function sustainDamage(damage:Number):void
+		{
+			hp -= damage;
+			if (hp < 0)
+			{
+				destroy();
+			}
+		}
 	}
 }

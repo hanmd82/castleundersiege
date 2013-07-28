@@ -1,6 +1,9 @@
 package projectile
 {
+	import enemy.Enemy;
+
 	import flash.geom.Point;
+
 	import starling.display.Sprite;
 
 	public class Projectile
@@ -30,6 +33,28 @@ package projectile
 			m_velocityY = 0;
 		}
 		
+		public function checkCollision():Vector.<Enemy>
+		{
+			// hit something along the trajectory from source to destination
+			// projectiles currently pass through one another
+
+			var projectilePos:Point = new Point(sprite.x, sprite.y);
+			var enemiesHit:Vector.<Enemy> = new Vector.<Enemy>();
+
+			for each (var e:Enemy in GM.enemies)
+			{
+				var enemyPos:Point = new Point(e.sprite.x, e.sprite.y);
+				var distance:Number = Point.distance(projectilePos, enemyPos);
+				if (distance < sprite.width/2 + e.sprite.width/2)
+				{
+					enemiesHit.push(e);
+				}
+			}
+			return enemiesHit;
+		}
+
+		public function dealDamage(enemiesHit:Vector.<Enemy>):void{}
+
 		public function destroy():void
 		{
 			bMarkedForDestroy = true;
@@ -40,6 +65,13 @@ package projectile
 		{
 			sprite.x += m_velocityX;
 			sprite.y += m_velocityY;
+
+			var enemiesHit:Vector.<Enemy> = checkCollision();
+			if (enemiesHit.length != 0)
+			{
+				dealDamage(enemiesHit);
+				destroy();
+			}
 		}
 		
 		public function get speed():Number { return m_speed; }
