@@ -14,8 +14,8 @@ package enemy
 			img.y = -img.height * 0.5;
 			sprite.addChild(img);
 			
-			speed = 0.5;
-			hp = GM.ENEMY_HIT_POINTS_SMALL;
+			speed = GM.ENEMY_SPEED_LIGHT;
+			hp = GM.ENEMY_HIT_POINTS_LIGHT;
 		}
 	}
 }

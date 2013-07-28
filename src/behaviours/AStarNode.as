@@ -41,7 +41,8 @@ package behaviours
 //				}
 				
 				// left
-				neighbors.push(new AStarNode(xl,y));
+				if(GM.grid[xl][y] == null)
+					neighbors.push(new AStarNode(xl,y));
 				
 				// bottom left
 //				if(y < GM.gridNumCellsY-1 && GM.grid[xl][y+1] == null)
@@ -61,7 +62,8 @@ package behaviours
 //				}
 				
 				// right
-				neighbors.push(new AStarNode(xr,y));
+				if(GM.grid[xr][y] == null)
+					neighbors.push(new AStarNode(xr,y));
 				
 				// bottom right
 //				if(y < GM.gridNumCellsY-1 && GM.grid[xr][y+1] == null)

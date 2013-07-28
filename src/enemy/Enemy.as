@@ -114,10 +114,10 @@ package enemy
 					closest = distSq;
 					closestIndex = r;
 				}
-				else // getting further
-				{
-					break;
-				}
+//				else // getting further
+//				{
+//					break;
+//				}
 			}
 			
 			// reaching the end

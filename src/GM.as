@@ -10,6 +10,7 @@ package
 	import behaviours.AStarNode;
 	
 	import enemy.Enemy;
+	import enemy.EnemyHeavy;
 	import enemy.EnemyLight;
 	import enemy.Route;
 	import enemy.SpawnParams;
@@ -62,7 +63,7 @@ package
 		public static var isRelease:Boolean = false;
 		
 		// TILE
-		public static var prevTouchedTile:Image;
+		public static var tileSelectedImg:Image;
 		public static var prevTouchedGX:int;
 		public static var prevTouchedGY:int;
 		public static const TILE_TINT_VALID_COLOR:uint = 0x339933;
@@ -96,10 +97,12 @@ package
 		public static var projectiles:Vector.<Projectile>;
 
 		// enemies
-		public static const ENEMY_HIT_POINTS_SMALL:uint  = 15;
-		public static const ENEMY_HIT_POINTS_MEDIUM:uint = 40;
-		public static const ENEMY_HIT_POINTS_LARGE:uint  = 75;
-
+		public static const ENEMY_HIT_POINTS_LIGHT:uint  = 15;
+		public static const ENEMY_HIT_POINTS_HEAVY:uint = 75;
+		public static const ENEMY_HIT_POINTS_KAMI:uint  = 40;
+		public static const ENEMY_SPEED_LIGHT:Number  = 0.5;
+		public static const ENEMY_SPEED_HEAVY:Number = 0.1;
+		public static const ENEMY_SPEED_KAMI:Number  = 0.1;
 		public static var enemies:Vector.<Enemy>;
 		public static var routes:Vector.<Route>;
 		public static var astar:AStar;
@@ -153,10 +156,14 @@ package
 //			var tf:TextField = new TextField(500, 300, "hello world");
 //			root.addChild(tf);
 			
-			prevTouchedTile = null;
+			// bg
+			layerBG.addChild(new Image(assets.getTexture("bg")));
 			
 			// tile texture
 			var tileTex:Texture = assets.getTexture("tile");
+			tileSelectedImg = new Image(tileTex);
+			tileSelectedImg.visible = false;
+			layerBG.addChild(tileSelectedImg);
 			
 			// set up grid
 			grid = new Array(gridNumCellsX);
@@ -166,11 +173,11 @@ package
 				for(var y:int = 0; y < gridNumCellsY; y++)
 				{
 					//grid[x][y]
-					var tileImg:Image = new Image(tileTex);
-					tileImg.name = "tile_"+x+"_"+y;
-					tileImg.x = x*tileWidth;
-					tileImg.y = y*tileHeight;
-					layerBG.addChild(tileImg);
+//					var tileImg:Image = new Image(tileTex);
+//					tileImg.name = "tile_"+x+"_"+y;
+//					tileImg.x = x*tileWidth;
+//					tileImg.y = y*tileHeight;
+//					layerBG.addChild(tileImg);
 				}
 			}
 			// draw grid
@@ -255,6 +262,7 @@ package
 			
 			
 			// handle input
+			
 			// convert touchPos to grid cell index
 			var gx:int = Math.floor(touchPos.x / 32);
 			var gy:int = Math.floor(touchPos.y / 32);
@@ -265,46 +273,34 @@ package
 					prevTouchedGX = gx;
 					prevTouchedGY = gy;
 					
-					// default color tint is white
-					if(prevTouchedTile)
-						prevTouchedTile.color = 0xFFFFFF;
+					tileSelectedImg.x = gx * tileWidth;
+					tileSelectedImg.y = gy * tileHeight;
+					tileSelectedImg.visible = true;
 					
-					// first check routes are valid
-					var bValid:Boolean = true;
-					for(var r:int = routes.length-1; r >= 0; r--)
+					if(checkTowerCellValid(gx, gy))
 					{
-						var path:Vector.<AStarNode> = astar.search(routes[r].startNode, castle.node);
-						if(path.length == 0)
-						{
-							bValid = false;
-							break;
-						}
+						tileSelectedImg.color = TILE_TINT_VALID_COLOR;
+						//tileImg.visible = true;
 					}
-					
-					var tileImg:Image = layerBG.getChildByName("tile_"+gx+"_"+gy) as Image;
-					
-					if(bValid)
-					{
-						tileImg.color = TILE_TINT_VALID_COLOR;
-					prevTouchedTile = tileImg;
-					//tileImg.visible = true;
-				}
 					else
 					{
-						tileImg.color = TILE_TINT_INVALID_COLOR;
-			}
+						tileSelectedImg.color = TILE_TINT_INVALID_COLOR;
+					}
 				}
 			}
-			else if(prevTouchedTile) // released touch
+			else if(isRelease) // released touch
 			{
-				prevTouchedTile.color = 0xFFFFFF;
-				prevTouchedTile = null;
+				//tileSelectedImg.color = 0xFFFFFF;
+				tileSelectedImg.visible = false;
 				
-				if(grid[gx][gy] == null)
+				if(checkTowerCellValid(gx, gy))
 				{
 					grid[gx][gy] = new TowerBasic(gx*tileWidth, gy*tileHeight);
-					
 					// whenever tower is placed, we have to re-route
+					for(var r:int = routes.length-1; r >= 0; r--)
+					{
+						routes[r].path = routes[r].temp_path;
+					}
 				}
 			}
 
@@ -358,6 +354,38 @@ package
 				GM.gameEnd();
 		}
 		
+		private static function checkTowerCellValid(gx:int, gy:int):Boolean
+		{
+			// first check if something already there
+			if(grid[gx][gy] != null)
+			{
+				return false;
+			}
+				// check if it is within castle
+			else if(castle.contains(gx,gy))
+			{
+				return false;
+			}
+			else
+			{
+				// check routes are valid
+				// set something to grid temporarily to block it
+				grid[gx][gy] = 123;
+				for(var r:int = routes.length-1; r >= 0; r--)
+				{
+					routes[r].temp_path = astar.search(routes[r].startNode, castle.node);
+					if(routes[r].temp_path == null)
+					{
+						return false;
+					}
+				}
+				// unset grid cell
+				grid[gx][gy] = null;
+			}
+			
+			return true;
+		}
+		
 		public static function gameEnd():void
 		{
 		}
@@ -373,7 +401,7 @@ package
 			for(i=0; i < 20; i++)
 			{
 				w.add(new SpawnParams(EnemyLight, i * 45, GM.routes[0]));
-				w.add(new SpawnParams(EnemyLight, i * 45, GM.routes[1]));
+				w.add(new SpawnParams(EnemyHeavy, i * 45, GM.routes[1]));
 				w.add(new SpawnParams(EnemyLight, i * 45, GM.routes[2]));
 	}
 			w.endDelayFrames = 60*20; // 10s

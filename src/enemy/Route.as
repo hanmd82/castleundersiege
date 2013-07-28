@@ -11,6 +11,7 @@ package enemy
 		public var spawnX:Number;
 		public var spawnY:Number;
 		public var path:Vector.<AStarNode>;
+		public var temp_path:Vector.<AStarNode>;
 		
 		public function Route(startGX:int, startGY:int, offsetX:Number, offsetY:Number)
 		{
