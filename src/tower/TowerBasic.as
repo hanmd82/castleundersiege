@@ -11,8 +11,12 @@ package tower
 			super();
 
 			towerAttributeSet = "tower_basic";
+			projectileType    = "projectile_basic";
 
 			img = new Image(GM.assets.getTexture("tower_basic"));
+			towerPos.x = posX;
+			towerPos.y = posY;
+
 			sprite.addChild(img);
 			sprite.x = posX;
 			sprite.y = posY;
@@ -20,6 +24,8 @@ package tower
 			attackRadius   = GM.TOWER_ATTACK_RADIUS_SMALL;
 			attackInterval = GM.TOWER_ATTACK_INTERVAL_MEDIUM;
 			numProjectiles = 1;
+
+			isReloaded = false;
 		}
 
 		public function upgrade(newTowerAttributeSet:String):void
@@ -32,6 +38,7 @@ package tower
 					case "tower_longbow":
 						trace("upgraded to long-range longbow tower");
 						towerAttributeSet = "tower_longbow";
+						projectileType    = "projectile_basic";
 						img.texture       = GM.assets.getTexture("tower_longbow");
 						attackRadius      = GM.TOWER_ATTACK_RADIUS_LARGE;
 						attackInterval    = GM.TOWER_ATTACK_INTERVAL_MEDIUM;
@@ -40,6 +47,7 @@ package tower
 					case "tower_cannon":
 						trace("upgraded to high-damage cannon tower");
 						towerAttributeSet = "tower_cannon";
+						projectileType    = "projectile_bomb";
 						img.texture       = GM.assets.getTexture("tower_cannon");
 						attackRadius      = GM.TOWER_ATTACK_RADIUS_SMALL;
 						attackInterval    = GM.TOWER_ATTACK_INTERVAL_SLOW;

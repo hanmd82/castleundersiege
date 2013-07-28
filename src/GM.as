@@ -75,6 +75,10 @@ package
 		public static var towers:Vector.<Tower>;
 
 		// projectiles
+		public static const PROJECTILE_SPEED_SLOW:uint    = 5;
+		public static const PROJECTILE_SPEED_MEDIUM:uint  = 10;
+		public static const PROJECTILE_SPEED_FAST:uint    = 15;
+
 		public static const PROJECTILE_DAMAGE_LIGHT:uint  = 10;
 		public static const PROJECTILE_DAMAGE_MEDIUM:uint = 20;
 		public static const PROJECTILE_DAMAGE_HEAVY:uint  = 30;
