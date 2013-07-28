@@ -1,8 +1,9 @@
 package projectile
 {
 	import enemy.Enemy;
-
+	
 	import starling.display.Image;
+	import starling.textures.TextureSmoothing;
 
 	public class ProjectileBasic extends Projectile
 	{
@@ -11,6 +12,8 @@ package projectile
 			super();
 
 			var img:Image = new Image(GM.assets.getTexture("projectile_basic"));
+			img.touchable = false;
+			img.smoothing = TextureSmoothing.NONE;
 			sprite.addChild(img);
 			sprite.x = posX;
 			sprite.y = posY;

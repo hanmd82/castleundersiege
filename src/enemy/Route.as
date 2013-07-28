@@ -4,6 +4,7 @@ package enemy
 	
 	import starling.display.Image;
 	import starling.display.Sprite;
+	import starling.textures.TextureSmoothing;
 
 	public class Route
 	{
@@ -26,6 +27,8 @@ package enemy
 			GM.layerGame.addChild(sprite);
 			
 			img = new Image(GM.assets.getTexture("tile"));
+			img.touchable = false;
+			img.smoothing = TextureSmoothing.NONE;
 			img.color = 0xffd22a;
 			sprite.addChild(img);
 			img.x = startGX * GM.tileWidth;

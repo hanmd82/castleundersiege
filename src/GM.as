@@ -7,7 +7,6 @@ package
 	import flash.utils.getTimer;
 	
 	import behaviours.AStar;
-	import behaviours.AStarNode;
 	
 	import enemy.Enemy;
 	import enemy.EnemyHeavy;
@@ -16,10 +15,15 @@ package
 	import enemy.SpawnParams;
 	import enemy.Wave;
 	
+	import particles.Particle;
+	import particles.ParticlesPool;
+	import particles.SnowParticle;
+	
 	import projectile.Projectile;
 	
 	import screens.InstructionsScreen;
 	
+	import starling.display.DisplayObject;
 	import starling.display.DisplayObjectContainer;
 	import starling.display.Image;
 	import starling.display.Sprite;
@@ -29,6 +33,7 @@ package
 	import starling.events.TouchPhase;
 	import starling.text.TextField;
 	import starling.textures.Texture;
+	import starling.textures.TextureSmoothing;
 	import starling.utils.AssetManager;
 	import starling.utils.HAlign;
 	import starling.utils.VAlign;
@@ -55,12 +60,14 @@ package
 		public static var root:DisplayObjectContainer;
 		public static var layerBG:Sprite;
 		public static var layerGame:Sprite;
+		public static var layerSnow:Sprite;
 		public static var layerUI:Sprite;
 
-		public static var totalElapsedMS:Number;
-		public static var elapsedMS:Number;
+		public static var totalElapsedMS:int;
+		public static var elapsedMS:int;
 		
-		public static var blockInput:Boolean;
+		public static var isPaused:Boolean = false;
+		public static var blockInput:Boolean = false;
 
 		// assets manager
 		public static var assets:AssetManager;
@@ -123,6 +130,9 @@ package
 		// waves
 		public static var wavesQueue:Vector.<Wave>;
 		
+		// particles
+		public static var particlesSnow:ParticlesPool;
+		
 		// ui
 		public static var instructions:InstructionsScreen;
 		public static var castleHPText:TextField;
@@ -143,12 +153,17 @@ package
 			//assets.addTextureAtlas("spritesheet", new TextureAtlas(assets.getTexture("spritesheet"), 
 			
 			root = newRoot;
+			root.addEventListener(Event.ENTER_FRAME, gameUpdate);
+			isPaused = true;
 			
 			layerBG = new Sprite();
 			root.addChild(layerBG);
 			
 			layerGame = new Sprite();
 			root.addChild(layerGame);
+			
+			layerSnow = new Sprite();
+			root.addChild(layerSnow);
 			
 			layerUI = new Sprite();
 			root.addChild(layerUI);
@@ -171,6 +186,8 @@ package
 			// tile texture
 			var tileTex:Texture = assets.getTexture("tile");
 			tileSelectedImg = new Image(tileTex);
+			tileSelectedImg.touchable = false;
+			tileSelectedImg.smoothing = TextureSmoothing.NONE;
 			tileSelectedImg.visible = false;
 			layerBG.addChild(tileSelectedImg);
 			
@@ -218,9 +235,13 @@ package
 			
 			setupWaves();
 			
+			setupParticles();
+			
 			
 			// setup ui
 			var castleHPIcon:Image = new Image(assets.getTexture("ui_castle_hp"));
+			castleHPIcon.touchable = false;
+			castleHPIcon.smoothing = TextureSmoothing.NONE;
 			castleHPIcon.x = 10;
 			castleHPIcon.y = 5;
 			layerUI.addChild(castleHPIcon);
@@ -238,12 +259,11 @@ package
 			// play music
 			var bgm:Sound = new CastleUnderSiegeBGM();
 			bgm.play(0,int.MAX_VALUE, new SoundTransform(0.7));
-			
 		}
 		
 		public static function gameStart():void
 		{
-			root.addEventListener(Event.ENTER_FRAME, gameUpdate);
+			isPaused = false;
 			totalElapsedMS = getTimer();
 			root.addEventListener(TouchEvent.TOUCH, gameInput);
 			
@@ -294,14 +314,22 @@ package
 		public static function gameUpdate(evt:Event):void
 		{
 			// per frame
-			var currMS:Number = getTimer();
+			var currMS:int = getTimer();
 			elapsedMS = currMS - totalElapsedMS;
 			totalElapsedMS = currMS;
+			var elapsedSeconds:Number = elapsedMS/1000;
+			
+			// particles
+			particlesSnow.Update(elapsedSeconds);
+			
 			
 			//////////////////
 			// game logic
 			//////////////////
 			
+			// return if Paused
+			if(isPaused)
+				return;
 			
 			// handle input
 			
@@ -319,7 +347,12 @@ package
 					tileSelectedImg.y = gy * tileHeight;
 					tileSelectedImg.visible = true;
 					
-					if(checkTowerCellValid(gx, gy))
+					if(grid[gx][gy] != null)
+					{
+						tileSelectedImg.visible = false;
+						
+					}
+					else if(checkTowerCellValid(gx, gy))
 					{
 						tileSelectedImg.color = TILE_TINT_VALID_COLOR;
 						//tileImg.visible = true;
@@ -421,7 +454,7 @@ package
 			{
 				return false;
 			}
-				// check if it is within castle
+			// check if it is within castle
 			else if(castle.contains(gx,gy))
 			{
 				return false;
@@ -449,7 +482,7 @@ package
 		public static function gameEnd():void
 		{
 			// stop update
-			root.removeEventListener(Event.ENTER_FRAME, gameUpdate);
+			isPaused = true;
 			root.removeEventListener(TouchEvent.TOUCH, gameInput);
 			
 			// clear off all entities
@@ -479,6 +512,29 @@ package
 			instructions.show();
 		}
 		
+		public static function setupParticles():void
+		{
+			var tex:Texture;
+			var p:Particle;
+			var vec:Vector.<Particle>;
+			
+			// snow
+			var snowTextures:Array = ["particle_snow_5", "particle_snow_2", "particle_snow_4", "particle_snow_6"];
+			vec = new Vector.<Particle>();
+			for(var t:int = 0; t < snowTextures.length; t++)
+			{
+				tex = assets.getTexture(snowTextures[t]);
+				for(var i:int = 0; i < 50; i++)
+				{
+					p = new SnowParticle(tex);
+					vec.push(p);
+				}
+			}
+			particlesSnow = new ParticlesPool(vec, layerSnow);
+			particlesSnow.SetAsEmitter( 12, {
+				w:root.stage.stageWidth, y:-10, 
+				life:8});
+		}
 		
 		public static function setupWaves():void
 		{

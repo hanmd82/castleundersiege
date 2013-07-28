@@ -1,10 +1,11 @@
 package projectile
 {
-	import enemy.Enemy;
-
 	import flash.geom.Point;
-
+	
+	import enemy.Enemy;
+	
 	import starling.display.Image;
+	import starling.textures.TextureSmoothing;
 
 	public class ProjectileBomb extends Projectile
 	{
@@ -15,6 +16,8 @@ package projectile
 			super();
 
 			var img:Image = new Image(GM.assets.getTexture("projectile_bomb"));
+			img.touchable = false;
+			img.smoothing = TextureSmoothing.NONE;
 			sprite.addChild(img);
 			sprite.x = posX;
 			sprite.y = posY;

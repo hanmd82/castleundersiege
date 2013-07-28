@@ -6,6 +6,7 @@ package
 	
 	import starling.display.Image;
 	import starling.display.Sprite;
+	import starling.textures.TextureSmoothing;
 
 	public class Castle
 	{
@@ -20,6 +21,8 @@ package
 			GM.layerGame.addChild(sprite);
 			
 			var img:Image= new Image(GM.assets.getTexture("castle"));
+			img.touchable = false;
+			img.smoothing = TextureSmoothing.NONE;
 			sprite.addChild(img);
 			img.x = gx * GM.tileWidth - 52;
 			img.y = gy * GM.tileHeight - 74;

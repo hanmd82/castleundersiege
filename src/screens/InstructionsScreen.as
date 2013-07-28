@@ -5,6 +5,7 @@ package screens
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	import starling.text.TextField;
+	import starling.textures.TextureSmoothing;
 
 	public class InstructionsScreen extends Screen
 	{
@@ -14,6 +15,8 @@ package screens
 		public function InstructionsScreen()
 		{
 			img = new Image(GM.assets.getTexture("ui_instructions"));
+			//img.touchable = false;
+			img.smoothing = TextureSmoothing.NONE;
 			img.x = (GM.root.stage.stageWidth - img.width) * 0.5;
 			img.y = 50;
 			this.addChild(img);

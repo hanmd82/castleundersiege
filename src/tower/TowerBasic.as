@@ -4,6 +4,7 @@ package tower
 	import flash.utils.getTimer;
 	
 	import starling.display.Image;
+	import starling.textures.TextureSmoothing;
 
 	public class TowerBasic extends Tower
 	{
@@ -17,11 +18,22 @@ package tower
 			projectileType    = "projectile_basic";
 
 			img = new Image(GM.assets.getTexture("tower_basic"));
+			img.touchable = false;
+			img.smoothing = TextureSmoothing.NONE;
 			img.x = -(img.width>>1);
 			img.y = -(img.height>>1);
+			sprite.addChild(img);
+			
+			// add some army men
+			for(var i:int = 0; i < 2; i++)
+			{
+				var armyman:ArmyMan = new ArmyMan( (Math.random() * 15) - 8, img.y + 4);
+				sprite.addChild(armyman);
+			}
+			
+			
 			towerPos = new Point((gx+0.5)*GM.tileWidth, (gy+0.5)*GM.tileHeight);
 
-			sprite.addChild(img);
 			sprite.x = Math.floor(towerPos.x);
 			sprite.y = Math.floor(towerPos.y);
 			
