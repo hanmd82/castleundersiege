@@ -1,7 +1,5 @@
 package
 {
-	import enemy.*;
-
 	import flash.geom.Point;
 	import flash.media.Sound;
 	import flash.media.SoundTransform;
@@ -14,6 +12,10 @@ package
 	import enemy.Enemy;
 	import enemy.EnemyLight;
 	import enemy.Route;
+	import enemy.SpawnParams;
+	import enemy.Wave;
+	
+	import projectile.Projectile;
 	
 	import starling.display.DisplayObjectContainer;
 	import starling.display.Image;
@@ -27,9 +29,6 @@ package
 	
 	import tower.Tower;
 	import tower.TowerBasic;
-	
-	import enemy.SpawnParams;
-	import enemy.Wave;
 	
 
 	/**

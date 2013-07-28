@@ -135,14 +135,13 @@ package enemy
 			
 			m_rerouteCounter = (m_helperTargetPos.length / speed) + Math.random() * 3;
 		}
-	}
 
 		public function sustainDamage(damage:Number):void
 		{
 			hp -= damage;
 			if (hp < 0)
 			{
-				destroy();
+				explode();
 			}
 		}
 	}
