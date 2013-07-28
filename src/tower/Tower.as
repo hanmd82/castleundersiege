@@ -5,6 +5,8 @@ package tower
 
 	public class Tower
 	{
+		public var towerAttributeSet:String;
+
 		public var attackRadius:Number;
 		public var attackInterval:Number;	// ammo reload interval
 		public var numProjectiles:Number;	// that can be fired in parallel
