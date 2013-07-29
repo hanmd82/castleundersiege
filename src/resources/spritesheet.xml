@@ -1,22 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with TexturePacker http://texturepacker.com-->
-<!-- $TexturePacker:SmartUpdate:9d5ebd0452f0ac656cd7944191004457$ -->
+<!-- $TexturePacker:SmartUpdate:6e06db687898473c60aa2dbd5643e0ba$ -->
 <TextureAtlas imagePath="spritesheet.png">
     <SubTexture name="armymen" x="2" y="2" width="3" height="4"/>
     <SubTexture name="bg" x="7" y="2" width="640" height="480"/>
     <SubTexture name="castle" x="649" y="2" width="148" height="138"/>
     <SubTexture name="enemy_heavy" x="799" y="2" width="27" height="22"/>
     <SubTexture name="enemy_light" x="828" y="2" width="12" height="24"/>
-    <SubTexture name="particle_snow_2" x="842" y="2" width="2" height="2"/>
-    <SubTexture name="particle_snow_4" x="846" y="2" width="4" height="4"/>
-    <SubTexture name="particle_snow_5" x="852" y="2" width="5" height="5"/>
-    <SubTexture name="particle_snow_6" x="859" y="2" width="6" height="6"/>
-    <SubTexture name="projectile_basic" x="867" y="2" width="10" height="10"/>
-    <SubTexture name="projectile_bomb" x="879" y="2" width="32" height="32"/>
-    <SubTexture name="tile" x="913" y="2" width="32" height="32"/>
-    <SubTexture name="tower_basic" x="947" y="2" width="25" height="23"/>
-    <SubTexture name="tower_cannon" x="974" y="2" width="20" height="27"/>
+    <SubTexture name="particle_explode_circ" x="842" y="2" width="16" height="16"/>
+    <SubTexture name="particle_snow_2" x="860" y="2" width="2" height="2"/>
+    <SubTexture name="particle_snow_4" x="864" y="2" width="4" height="4"/>
+    <SubTexture name="particle_snow_5" x="870" y="2" width="5" height="5"/>
+    <SubTexture name="particle_snow_6" x="877" y="2" width="6" height="6"/>
+    <SubTexture name="particle_spark" x="885" y="2" width="4" height="1"/>
+    <SubTexture name="projectile_basic" x="891" y="2" width="12" height="12"/>
+    <SubTexture name="projectile_bomb" x="905" y="2" width="32" height="32"/>
+    <SubTexture name="tile" x="939" y="2" width="32" height="32"/>
+    <SubTexture name="tower_basic" x="973" y="2" width="25" height="23"/>
+    <SubTexture name="tower_cannon" x="1000" y="2" width="20" height="27"/>
     <SubTexture name="tower_longbow" x="2" y="484" width="27" height="30"/>
     <SubTexture name="ui_castle_hp" x="31" y="484" width="17" height="36"/>
-    <SubTexture name="ui_instructions" x="50" y="484" width="468" height="266"/>
+    <SubTexture name="ui_defend_btn_down" x="50" y="484" width="141" height="49"/>
+    <SubTexture name="ui_defend_btn_up" x="193" y="484" width="141" height="49"/>
+    <SubTexture name="ui_instructions" x="336" y="484" width="468" height="266"/>
 </TextureAtlas>

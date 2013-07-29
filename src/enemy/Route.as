@@ -23,16 +23,16 @@ package enemy
 			spawnX = (startGX + 0.5) * GM.tileWidth + offsetX;
 			spawnY = (startGY + 0.5) * GM.tileHeight + offsetY;
 			
-			var sprite:Sprite = new Sprite();
-			GM.layerGame.addChild(sprite);
-			
-			img = new Image(GM.assets.getTexture("tile"));
-			img.touchable = false;
-			img.smoothing = TextureSmoothing.NONE;
-			img.color = 0xffd22a;
-			sprite.addChild(img);
-			img.x = startGX * GM.tileWidth;
-			img.y = startGY * GM.tileHeight;
+//			var sprite:Sprite = new Sprite();
+//			GM.layerGame.addChild(sprite);
+//			
+//			img = new Image(GM.assets.getTexture("tile"));
+//			img.touchable = false;
+//			img.smoothing = TextureSmoothing.NONE;
+//			img.color = 0xffd22a;
+//			sprite.addChild(img);
+//			img.x = startGX * GM.tileWidth;
+//			img.y = startGY * GM.tileHeight;
 		}
 		
 		public function destroy():void

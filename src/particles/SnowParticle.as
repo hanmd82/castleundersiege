@@ -1,7 +1,3 @@
-/*
-* Author: Bruce Chia
-* Created: Nov 4, 2012
-*/
 package particles
 {
 	import starling.display.DisplayObjectContainer;
@@ -18,7 +14,6 @@ package particles
 		
 		private var m_vX:Number;
 		private var m_vY:Number;
-		private var m_params:Object;
 		
 		public function SnowParticle(tex:Texture)
 		{
@@ -35,12 +30,6 @@ package particles
 		{
 			super.On(parent, params);
 			
-			m_params = params;
-			Restart();
-		}
-		
-		public function Restart():void
-		{
 			var angle:Number = BASE_ANGLE + (Math.random() - 0.5) * SPREAD_ANGLE;
 			var speed:Number = BASE_SPEED + (Math.random() - 0.5) * SPREAD_SPEED;
 			m_vX = Math.cos(angle) * speed;

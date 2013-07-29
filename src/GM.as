@@ -15,9 +15,11 @@ package
 	import enemy.SpawnParams;
 	import enemy.Wave;
 	
+	import particles.BurstParticle;
 	import particles.Particle;
 	import particles.ParticlesPool;
 	import particles.SnowParticle;
+	import particles.StaticParticle;
 	
 	import projectile.Projectile;
 	
@@ -60,7 +62,7 @@ package
 		public static var root:DisplayObjectContainer;
 		public static var layerBG:Sprite;
 		public static var layerGame:Sprite;
-		public static var layerSnow:Sprite;
+		public static var layerParticles:Sprite;
 		public static var layerUI:Sprite;
 
 		public static var totalElapsedMS:int;
@@ -124,7 +126,7 @@ package
 		public static var astar:AStar;
 		
 		// castle home
-		public static const CASTLE_HP_MAX:int = 125;
+		public static const CASTLE_HP_MAX:int = 20;
 		public static var castle:Castle;
 		
 		// waves
@@ -132,6 +134,8 @@ package
 		
 		// particles
 		public static var particlesSnow:ParticlesPool;
+		public static var particlesExplode:ParticlesPool;
+		public static var particlesExplodeCirc:ParticlesPool;
 		
 		// ui
 		public static var instructions:InstructionsScreen;
@@ -162,8 +166,8 @@ package
 			layerGame = new Sprite();
 			root.addChild(layerGame);
 			
-			layerSnow = new Sprite();
-			root.addChild(layerSnow);
+			layerParticles = new Sprite();
+			root.addChild(layerParticles);
 			
 			layerUI = new Sprite();
 			root.addChild(layerUI);
@@ -212,29 +216,6 @@ package
 			// init castle
 			castle = new Castle(gridNumCellsX/2 -1, gridNumCellsY-2); // 9, 13
 			
-			// set up starting positions for route
-			// right-mid
-			routes.push(new Route(gridNumCellsX-1, (gridNumCellsY>>1), tileWidth, 0) );
-			// left-mid
-			routes.push(new Route(0, (gridNumCellsY>>1), -tileWidth, 0) );
-			// mid-top
-			routes.push(new Route( (gridNumCellsX>>1), 0, 0, -tileHeight) );
-			
-			// initialize paths
-			for(var r:int = routes.length-1; r >= 0; r--)
-			{
-				routes[r].path = astar.search(routes[r].startNode, castle.node);
-				
-				var s:String = "route["+r+"] = ";
-				for(var p:int = 0; p < routes[r].path.length; p++)
-					s += " ["+routes[r].path[p].x + ","+routes[r].path[p].y+"]";
-				trace(s);
-			}
-			
-			
-			
-			setupWaves();
-			
 			setupParticles();
 			
 			
@@ -270,6 +251,17 @@ package
 			isTouching = false;
 			isPress = false;
 			isRelease = false;
+			
+			// reset hp
+			castle.hp = CASTLE_HP_MAX;
+			
+			// set up starting positions for route
+			// must be done before waves
+			setupRoutes();
+			
+			// set up waves
+			setupWaves();
+			
 		}
 		
 		public static function gameInput(evt:TouchEvent):void
@@ -321,6 +313,8 @@ package
 			
 			// particles
 			particlesSnow.Update(elapsedSeconds);
+			particlesExplode.Update(elapsedSeconds);
+			particlesExplodeCirc.Update(elapsedSeconds);
 			
 			
 			//////////////////
@@ -517,6 +511,8 @@ package
 			var tex:Texture;
 			var p:Particle;
 			var vec:Vector.<Particle>;
+			var img:Image;
+			var i:int;
 			
 			// snow
 			var snowTextures:Array = ["particle_snow_5", "particle_snow_2", "particle_snow_4", "particle_snow_6"];
@@ -524,16 +520,58 @@ package
 			for(var t:int = 0; t < snowTextures.length; t++)
 			{
 				tex = assets.getTexture(snowTextures[t]);
-				for(var i:int = 0; i < 50; i++)
+				for(i = 0; i < 50; i++)
 				{
 					p = new SnowParticle(tex);
 					vec.push(p);
 				}
 			}
-			particlesSnow = new ParticlesPool(vec, layerSnow);
+			particlesSnow = new ParticlesPool(vec, layerParticles);
 			particlesSnow.SetAsEmitter( 12, {
 				w:root.stage.stageWidth, y:-10, 
 				life:8});
+			
+			// burst / explode
+			vec = new Vector.<Particle>();
+			tex = assets.getTexture("particle_spark");
+			for(i = 0; i < 24; i++)
+			{
+				p = new BurstParticle(i,24);
+				img = new Image(tex);
+				img.touchable = false;
+				img.smoothing = TextureSmoothing.NONE;
+				p.displayObject = img;
+				vec.push(p);
+			}
+			particlesExplode = new ParticlesPool(vec, layerParticles);
+			
+			vec = new Vector.<Particle>();
+			tex = assets.getTexture("particle_explode_circ");
+			p = new StaticParticle(tex);
+			vec.push(p);
+			particlesExplodeCirc = new ParticlesPool(vec, layerParticles);
+			
+		}
+		
+		private static function setupRoutes():void
+		{
+			// right-mid
+			routes.push(new Route(gridNumCellsX-1, (gridNumCellsY>>1), tileWidth, 0) );
+			// left-mid
+			routes.push(new Route(0, (gridNumCellsY>>1), -tileWidth, 0) );
+			// mid-top
+			routes.push(new Route( (gridNumCellsX>>1), 0, 0, -tileHeight) );
+			
+			// initialize paths
+			for(var r:int = routes.length-1; r >= 0; r--)
+			{
+				routes[r].path = astar.search(routes[r].startNode, castle.node);
+				
+				//				var s:String = "route["+r+"] = ";
+				//				for(var p:int = 0; p < routes[r].path.length; p++)
+				//					s += " ["+routes[r].path[p].x + ","+routes[r].path[p].y+"]";
+				//				trace(s);
+			}
 		}
 		
 		public static function setupWaves():void

@@ -1,7 +1,3 @@
-/*
-* Author: Bruce Chia
-* Created: Nov 4, 2012
-*/
 package particles 
 {
 	import starling.display.DisplayObject;
@@ -14,11 +10,13 @@ package particles
 	public class Particle
 	{
 		protected var m_lifeRemaining:Number;
+		protected var m_params:Object;
 		protected var m_dob:DisplayObject;
 		
 		public function Particle()
 		{
 			m_lifeRemaining = 0;
+			m_params= null;
 			m_dob = null;
 		}
 		
@@ -46,6 +44,11 @@ package particles
 					m_dob.parent.removeChild(m_dob);
 				m_dob = null;
 			}
+			
+			if(m_params != null)
+			{
+				m_params = null;
+			}
 		}
 		
 		public function get isOn():Boolean
@@ -58,6 +61,7 @@ package particles
 			if(!isOn)
 				parent.addChild(m_dob);
 			
+			m_params = params;
 			m_lifeRemaining = params.life;
 		}
 		public function Off():void

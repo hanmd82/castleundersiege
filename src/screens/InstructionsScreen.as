@@ -1,15 +1,15 @@
 package screens
 {
+	import starling.display.Button;
 	import starling.display.Image;
-	import starling.events.Touch;
-	import starling.events.TouchEvent;
-	import starling.events.TouchPhase;
+	import starling.events.Event;
 	import starling.text.TextField;
 	import starling.textures.TextureSmoothing;
 
 	public class InstructionsScreen extends Screen
 	{
 		private var img:Image;
+		private var btn:Button;
 		private var text:TextField;
 		
 		public function InstructionsScreen()
@@ -20,17 +20,19 @@ package screens
 			img.x = (GM.root.stage.stageWidth - img.width) * 0.5;
 			img.y = 50;
 			this.addChild(img);
-			this.addEventListener(TouchEvent.TOUCH, OnTouch);
+			
+			btn = new Button(GM.assets.getTexture("ui_defend_btn_up"), "",
+				GM.assets.getTexture("ui_defend_btn_down"));
+			btn.x = img.x + ((img.width-4 - btn.width)>>1);
+			btn.y = img.y + 180;
+			this.addChild(btn);
+			btn.addEventListener(Event.TRIGGERED, OnBtnTriggered);
 		}
 		
-		public function OnTouch(evt:TouchEvent):void
+		public function OnBtnTriggered(evt:Event):void
 		{
-			var touch:Touch = evt.getTouch(this, TouchPhase.ENDED);
-			if(touch)
-			{
-				hide();
-				GM.gameStart();
-			}
+			hide();
+			GM.gameStart();
 		}
 		
 		public function show():void

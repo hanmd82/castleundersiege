@@ -50,10 +50,12 @@ package enemy
 		
 		public function explode():void
 		{
+			// throw particles
+			GM.particlesExplode.On({x:sprite.x, y:sprite.y, life:0.4});
+			GM.particlesExplodeCirc.On({x:sprite.x, y:sprite.y, life:0.05});
+			
 			bMarkedForDestroy= true;
 			GM.layerGame.removeChild(sprite);
-			
-			// throw particles
 		}
 		
 		public function update():void

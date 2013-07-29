@@ -1,7 +1,3 @@
-/*
-* Author: Bruce Chia
-* Created: Nov 4, 2012
-*/
 package particles 
 {
 	import particles.Particle;
@@ -128,6 +124,8 @@ package particles
 		
 		public function Update(elapsedTime:Number):void
 		{
+			// skip frames which are more than 0.5s (lag)
+			if(elapsedTime > 0.5) return;
 			m_emitElapsed -= elapsedTime;
 			
 			var p:Particle;
